@@ -9,6 +9,7 @@ import '../node_modules/vuetify/src/stylus/app.styl'
 import VueFire from 'vuefire'
 import firebase from 'firebase/app'
 import 'firebase/firestore'
+import 'firebase/storage'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faPlusSquare } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -18,11 +19,13 @@ Vue.use(Vuetify)
 Vue.use(VueFire)
 firebase.initializeApp({
   projectId: 'clatterer-768ab',
-  databaseURL: 'https://clatterer-768ab.firebaseio.com'
+  databaseURL: 'https://clatterer-768ab.firebaseio.com',
+  storageBucket: 'gs://clatterer-768ab.appspot.com'
 })
 
 Vue.config.productionTip = false
 export const db = firebase.firestore()
+export const storage = firebase.storage()
 
 library.add(faPlusSquare)
 
