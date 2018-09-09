@@ -23,7 +23,7 @@ export default {
   },
   firestore () {
     return {
-      messages: db.collection('chats').orderBy('TimeStamp')
+      messages: db.collection('chats').orderBy('timeStamp')
     }
   }
 }
