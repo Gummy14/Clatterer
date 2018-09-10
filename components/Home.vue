@@ -1,7 +1,7 @@
 <template>
     <div>
       <div v-for="(texts, id) in messages" :key="id">
-        <message-template :messageText="texts.messageText"></message-template>
+        <message-template :messageText="texts.messageText" :imageUrl="texts.imageMessage"></message-template>
       </div>
         <messenger></messenger>
     </div>

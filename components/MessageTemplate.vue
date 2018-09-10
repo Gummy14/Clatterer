@@ -2,13 +2,15 @@
     <div>
         <h5>Alex Helm</h5>
         <h1>{{ messageText }}</h1>
+        <img :src="imageUrl" alt="nope">
     </div>
 </template>
 <script>
 export default {
   name: 'message-template',
   props: [
-    'messageText'
+    'messageText',
+    'imageUrl'
   ]
 }
 </script>

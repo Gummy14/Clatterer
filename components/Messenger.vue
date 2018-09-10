@@ -1,7 +1,7 @@
 <template>
     <v-layout>
       <span class="message-enter">
-        <input id="fileUploader" type="file" ref="fileInput" @change="uploadFile">
+        <input id="fileUploader" type="file" ref="fileInput" @change="getFile">
         <v-btn v-on:click="openFileDialogue()" flat icon><font-awesome-icon icon="plus-square"/></v-btn>
         <v-text-field v-model="messageText"></v-text-field>
         <v-btn v-on:click="sendMessage(messageText)">Send</v-btn>
@@ -23,12 +23,18 @@ export default {
   methods: {
     sendMessage (messageText) {
       var timeStamp = new Date()
-      db.collection('chats').add({ messageText, timeStamp })
+      var imageMessage = this.imageUrl
+      if (this.image != null) {
+        storage.ref(timeStamp.toString()).put(this.image)
+        this.image = null
+        this.imageUrl = ''
+      }
+      db.collection('chats').add({ messageText, imageMessage, timeStamp })
     },
     openFileDialogue () {
       this.$refs.fileInput.click()
     },
-    uploadFile (event) {
+    getFile (event) {
       const file = event.target.files
       const fileReader = new FileReader()
       fileReader.addEventListener('load', () => {
@@ -36,8 +42,6 @@ export default {
       })
       fileReader.readAsDataURL(file[0])
       this.image = file[0]
-      var timeStamp = new Date()
-      storage.ref(timeStamp.toString()).put(this.image)
     }
   }
 }
