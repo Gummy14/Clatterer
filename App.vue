@@ -1,8 +1,10 @@
 <template>
   <v-app dark>
-    <v-toolbar app:clipped-left="clipped" color="purple darken-3">
-      <v-toolbar-title v-text="title"></v-toolbar-title>
-    </v-toolbar>
+    <div class="toolbar">
+      <v-toolbar app:clipped-left="clipped" color="purple darken-3">
+        <v-toolbar-title v-text="title"></v-toolbar-title>
+      </v-toolbar>
+    </div>
     <v-content>
       <router-view/>
     </v-content>
@@ -29,3 +31,8 @@ export default {
   name: 'App'
 }
 </script>
+<style scoped>
+.toolbar {
+  padding-bottom: 2%;
+}
+</style>

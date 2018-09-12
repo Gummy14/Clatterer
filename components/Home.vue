@@ -1,9 +1,13 @@
 <template>
     <div>
-      <div v-for="(texts, id) in messages" :key="id">
-        <message-template :messageText="texts.messageText" :imageUrl="texts.imageMessage"></message-template>
+      <div v-for="(texts, id) in messages" :key="id" class="message-holder">
+        <v-card raised>
+          <message-template :messageText="texts.messageText" :imageUrl="texts.imageMessage"></message-template>
+        </v-card>
       </div>
+      <div class="message-container">
         <messenger></messenger>
+      </div>
     </div>
 </template>
 <script>
@@ -31,12 +35,13 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.message-enter {
-  position: absolute;
-  bottom: 0px;
-  width: 100%;
+.message-holder {
+  padding-left: 3%;
+  padding-right: 3%;
+  padding-bottom: 1%;
+}
+.message-container {
   display: flex;
-  padding-left: 2.5%;
-  padding-right: 2%;
+  justify-content: center;
 }
 </style>
