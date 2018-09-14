@@ -1,7 +1,7 @@
 <template>
   <v-app dark>
     <div class="toolbar">
-      <v-toolbar app:clipped-left="clipped" color="purple darken-3">
+      <v-toolbar fixed app:clipped-left="clipped" color="purple darken-3">
         <v-toolbar-title v-text="title"></v-toolbar-title>
       </v-toolbar>
     </div>

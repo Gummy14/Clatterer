@@ -1,10 +1,12 @@
 <template>
     <div>
+      <v-container class="mes-container">
       <div v-for="(texts, id) in messages" :key="id" class="message-holder">
         <v-card raised>
           <message-template :messageText="texts.messageText" :imageUrl="texts.imageMessage"></message-template>
         </v-card>
       </div>
+      </v-container>
       <div class="message-container">
         <messenger></messenger>
       </div>
@@ -29,6 +31,11 @@ export default {
     return {
       messages: db.collection('chats').orderBy('timeStamp')
     }
+  },
+  watch: {
+    messages: function (val) {
+      window.scrollTo(0, document.body.scrollHeight)
+    }
   }
 }
 </script>
@@ -43,5 +50,9 @@ export default {
 .message-container {
   display: flex;
   justify-content: center;
+}
+.mes-container {
+  margin-top: 5%;
+  margin-bottom: 7%;
 }
 </style>
