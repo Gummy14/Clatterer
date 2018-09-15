@@ -13,7 +13,10 @@ export default {
   props: [
     'messageText',
     'imageUrl'
-  ]
+  ],
+  mounted () {
+    window.scrollTo(0, document.body.scrollHeight)
+  }
 }
 </script>
 
