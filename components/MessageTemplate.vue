@@ -36,7 +36,6 @@ export default {
   },
   methods: {
     chooseReact () {
-      window.scrollTo(0, document.body.scrollHeight)
     }
   }
 }
