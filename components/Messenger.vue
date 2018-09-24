@@ -3,7 +3,7 @@
       <input id="fileUploader" type="file" ref="fileInput" @change="getFile">
       <v-btn v-on:click="openFileDialogue()" flat icon><font-awesome-icon icon="plus-square"/></v-btn>
       <v-text-field v-model="messageText"></v-text-field>
-      <v-btn v-on:click="sendMessage(messageText)">Send</v-btn>
+      <v-btn v-on:click="sendMessage(messageText, reacts)">Send</v-btn>
     </v-card>
 </template>
 <script>
@@ -15,19 +15,20 @@ export default {
       message: [],
       messageText: '',
       imageUrl: '',
-      image: null
+      image: null,
+      reacts: []
     }
   },
   methods: {
-    sendMessage (messageText) {
+    sendMessage (messageText, reacts) {
       var timeStamp = new Date()
       var imageMessage = this.imageUrl
       if (this.image != null) {
-        storage.ref(timeStamp.toString()).put(this.image)
+        storage.child('uploadedImages/' + timeStamp.toString()).put(this.image)
         this.image = null
         this.imageUrl = ''
       }
-      db.collection('chats').add({ messageText, imageMessage, timeStamp })
+      db.collection('chats').doc('chat 1').collection('messageData').add({ messageText, imageMessage, timeStamp, reacts })
     },
     openFileDialogue () {
       this.$refs.fileInput.click()

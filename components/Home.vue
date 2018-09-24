@@ -5,7 +5,7 @@
       <br>
       <div v-for="(texts, id) in messages" :key="id" class="message-holder">
         <v-card raised>
-          <message-template :messageText="texts.messageText" :imageUrl="texts.imageMessage"></message-template>
+          <message-template :messageText="texts.messageText" :imageUrl="texts.imageMessage" :reacts="texts.reacts" :timeStamp="texts.timeStamp" :documentID="texts.id"></message-template>
         </v-card>
       </div>
       <br>
@@ -34,7 +34,7 @@ export default {
   },
   firestore () {
     return {
-      messages: db.collection('chats').orderBy('timeStamp')
+      messages: db.collection('chats').doc('chat 1').collection('messageData').orderBy('timeStamp')
     }
   }
 }
@@ -50,7 +50,5 @@ export default {
 .message-container {
   display: flex;
   justify-content: center;
-}
-.mes-container {
 }
 </style>

@@ -25,7 +25,7 @@ firebase.initializeApp({
 
 Vue.config.productionTip = false
 export const db = firebase.firestore()
-export const storage = firebase.storage()
+export const storage = firebase.storage().ref()
 
 library.add(faPlusSquare)
 library.add(faPlusCircle)

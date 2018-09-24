@@ -2,40 +2,51 @@
     <div>
       <span class="name-and-react">
         <h3 class="user">Alex Helm
-          <v-btn @click="dialog = true" class="react-button" flat icon><font-awesome-icon class="react-button" icon="plus-circle"/></v-btn>
+          <v-btn @click="dialogue = true" class="react-button" flat icon><font-awesome-icon class="react-button" icon="plus-circle"/></v-btn>
         </h3>
       </span>
         <h1 class="message">{{ messageText }}</h1>
         <div class="image-container">
           <img class="image-style" :src="imageUrl">
         </div>
-        <v-dialog v-model="dialog" max-width="290">
+        <div v-for="(reactIcons, id) in reacts" :key="id">
+          <img class="reaction" :src="reactIcons">
+        </div>
+        <v-dialog v-model="dialogue" max-width="290">
           <v-card>
             <v-card-title class="headline">React Select</v-card-title>
-            <v-card-text>
-              Reacts go here...
-            </v-card-text>
+            <react-selection v-on:closeDialogueBox="closeDialogueBox()" :timeStamp="this.timeStamp" :documentID="this.documentID" :reacts="this.reacts"></react-selection>
           </v-card>
       </v-dialog>
     </div>
 </template>
 <script>
+import ReactSelection from './ReactSelection.vue'
 export default {
   name: 'message-template',
+  components: {
+    ReactSelection
+  },
   data () {
     return {
-      dialog: false
+      dialogue: false,
+      messageTimeStamp: null
     }
   },
   props: [
     'messageText',
-    'imageUrl'
+    'imageUrl',
+    'timeStamp',
+    'reacts',
+    'documentID'
   ],
   mounted () {
     window.scrollTo(0, document.body.scrollHeight)
+    this.messageTimeStamp = this.timeStamp
   },
   methods: {
-    chooseReact () {
+    closeDialogueBox () {
+      this.dialogue = false
     }
   }
 }
@@ -65,5 +76,12 @@ export default {
 }
 .react-button {
   float: right;
+}
+.reaction {
+    width: 32px;
+    height: 32px;
+    padding-top: .25%;
+    padding-bottom: .25%;
+    padding-left: .5%;
 }
 </style>
