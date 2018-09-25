@@ -1,9 +1,9 @@
 <template>
     <v-card>
       <div v-for="(reactions, id) in reactDocInFirebaseStorage" :key="id">
-        <div v-for="reactIcons in reactions.customReacts" :key="reactIcons">
+        <span v-for="reactIcons in reactions.customReacts" :key="reactIcons">
         <v-btn class="react-button" v-on:click="closeDialogueBox(reactIcons)"><img class="react-icon" :src="reactIcons"></v-btn>
-        </div>
+        </span>
       </div>
       <v-spacer></v-spacer>
       <input id="fileUploader" type="file" ref="fileInput" @change="getFile">

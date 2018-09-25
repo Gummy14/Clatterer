@@ -9,9 +9,9 @@
         <div class="image-container">
           <img class="image-style" :src="imageUrl">
         </div>
-        <div v-for="(reactIcons, id) in reacts" :key="id">
+        <span v-for="(reactIcons, id) in reacts" :key="id">
           <img class="reaction" :src="reactIcons">
-        </div>
+        </span>
         <v-dialog v-model="dialogue" max-width="290">
           <v-card>
             <v-card-title class="headline">React Select</v-card-title>
@@ -83,5 +83,6 @@ export default {
     padding-top: .25%;
     padding-bottom: .25%;
     padding-left: .5%;
+    margin-right: .25%;
 }
 </style>
