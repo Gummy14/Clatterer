@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="message-template">
       <span class="name-and-react">
         <h3 class="user">Alex Helm
           <v-btn @click="dialogue = true" class="react-button" flat icon><font-awesome-icon class="react-button" icon="plus-circle"/></v-btn>
@@ -59,9 +59,7 @@ export default {
   max-width: 100%;
 }
 .image-style {
-  max-height: 300px;
-  height: 70%;
-  width: auto;
+  max-width: 90%;
   padding-left: 1%;
   padding-bottom: 1%;
   display: flex;
