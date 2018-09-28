@@ -8,11 +8,11 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  mounted () {
+    document.documentElement.style.overflow = 'hidden'
+  }
 }
 </script>
 <style scoped>
-.toolbar {
-  padding-bottom: 2%;
-}
 </style>

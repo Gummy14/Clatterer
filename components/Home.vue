@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="page">
       <v-navigation-drawer
       :clipped="clipped"
       v-model="drawer"
@@ -70,21 +70,18 @@ export default {
 }
 .message-container {
   z-index: 1;
-  height: 110%;
-  background: red;
   position: relative;
   bottom: 0px;
   display: flex;
   justify-content: center;
 }
 .mes-container {
-  height: 126ex;
+  height: 94vh;
   overflow-y: scroll;
 }
 .message-enter {
   z-index: -1;
-  margin-bottom: -1.25%;
   width: 96%;
-  bottom: 100px;
+  bottom: 10vh;
 }
 </style>
