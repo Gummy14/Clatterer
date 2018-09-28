@@ -1,10 +1,10 @@
 <template>
-    <v-card raised hover class="message-enter">
+    <span class="messenger">
       <input id="fileUploader" type="file" ref="fileInput" @change="getFile">
       <v-btn v-on:click="openFileDialogue()" flat icon><font-awesome-icon icon="plus-square"/></v-btn>
       <v-text-field v-model="messageText"></v-text-field>
       <v-btn v-on:click="sendMessage(messageText, reacts)">Send</v-btn>
-    </v-card>
+    </span>
 </template>
 <script>
 import { db, storage } from '../main'
@@ -51,14 +51,7 @@ export default {
 #fileUploader {
   display: none;
 }
-.message-enter {
-  position: fixed;
-  bottom: 0px;
-  width: 96%;
+.messenger {
   display: flex;
-  padding-left: 2%;
-  padding-right: 2%;
-  padding-top: .5%;
-  margin-bottom: 1%;
 }
 </style>
