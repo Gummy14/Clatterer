@@ -1,5 +1,10 @@
 <template>
     <div>
+      <div class="toolbar">
+        <v-toolbar fixed app:clipped-left="clipped" color="purple darken-3">
+          <v-toolbar-title v-text="title"></v-toolbar-title>
+        </v-toolbar>
+    </div>
       <v-container class="mes-container">
       <br>
       <br>
@@ -29,7 +34,8 @@ export default {
   },
   data () {
     return {
-      messages: []
+      messages: [],
+      title: 'Clatterer'
     }
   },
   firestore () {
@@ -50,5 +56,8 @@ export default {
 .message-container {
   display: flex;
   justify-content: center;
+}
+.toolbar {
+  padding-bottom: 2%;
 }
 </style>
