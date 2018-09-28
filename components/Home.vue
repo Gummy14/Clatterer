@@ -15,11 +15,16 @@
         </v-toolbar>
       </div>
       <div class="mes-container">
+        <br>
       <div v-for="(texts, id) in messages" :key="id" class="message-holder">
         <v-card raised>
           <message-template :messageText="texts.messageText" :imageUrl="texts.imageMessage" :reacts="texts.reacts" :timeStamp="texts.timeStamp" :documentID="texts.id"></message-template>
         </v-card>
       </div>
+      <br>
+      <br>
+      <br>
+      <br>
       <br>
       </div>
       <div class="message-container">
@@ -58,27 +63,28 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .message-holder {
+  z-index: 2;
   padding-left: 3%;
   padding-right: 3%;
   padding-bottom: 1%;
 }
 .message-container {
-  background-image:rgba(0, 0, 0, 0.5);
-  opacity: 0%;
+  z-index: 1;
+  height: 110%;
+  background: red;
   position: relative;
   bottom: 0px;
   display: flex;
   justify-content: center;
 }
 .mes-container {
-  height: 106ex;
+  height: 126ex;
   overflow-y: scroll;
 }
-.toolbar {
-  padding-bottom: 2%;
-}
 .message-enter {
-  margin-bottom: 1.25%;
+  z-index: -1;
+  margin-bottom: -1.25%;
   width: 96%;
+  bottom: 100px;
 }
 </style>
