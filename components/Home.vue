@@ -15,7 +15,6 @@
         </v-toolbar>
       </div>
       <div class="mes-container">
-      <br>
       <div v-for="(texts, id) in messages" :key="id" class="message-holder">
         <v-card raised>
           <message-template :messageText="texts.messageText" :imageUrl="texts.imageMessage" :reacts="texts.reacts" :timeStamp="texts.timeStamp" :documentID="texts.id"></message-template>
@@ -49,7 +48,7 @@ export default {
       messages: [],
       title: 'Clatterer',
       clipped: true,
-      drawer: true
+      drawer: false
     }
   },
   firestore () {
@@ -76,8 +75,9 @@ export default {
   justify-content: center;
 }
 .mes-container {
-  transform: translateY(7vh);
-  height: 94vh;
+  padding-top: 2%;
+  transform: translateY(8%);
+  height: 95vh;
   overflow-y: scroll;
 }
 .message-enter {

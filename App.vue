@@ -1,5 +1,5 @@
 <template>
-  <v-app dark>
+  <v-app dark class="body-page">
     <v-content>
       <router-view/>
     </v-content>
@@ -15,4 +15,7 @@ export default {
 }
 </script>
 <style scoped>
+.body-page {
+  overflow: hidden;
+}
 </style>
