@@ -14,23 +14,45 @@
           <v-toolbar-title v-text="title"></v-toolbar-title>
         </v-toolbar>
       </div>
-      <div class="mes-container">
-      <div v-for="(texts, id) in messages" :key="id" class="message-holder">
-        <v-card raised>
-          <message-template :messageText="texts.messageText" :imageUrl="texts.imageMessage" :reacts="texts.reacts" :timeStamp="texts.timeStamp" :documentID="texts.id"></message-template>
-        </v-card>
+
+      <div v-if="!isMobile">
+        <div class="mes-container">
+        <div v-for="(texts, id) in messages" :key="id" class="message-holder">
+          <v-card raised>
+            <message-template :messageText="texts.messageText" :imageUrl="texts.imageMessage" :reacts="texts.reacts" :timeStamp="texts.timeStamp" :documentID="texts.id"></message-template>
+          </v-card>
+        </div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        </div>
+        <div class="message-container">
+          <v-card raised hover class="message-enter">
+            <messenger></messenger>
+          </v-card>
+        </div>
       </div>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
+
+      <div v-if="isMobile">
+        <v-container class="mes-container-mobile">
+        <div v-for="(texts, id) in messages" :key="id" class="message-holder-mobile">
+          <v-card raised>
+            <message-template :messageText="texts.messageText" :imageUrl="texts.imageMessage" :reacts="texts.reacts" :timeStamp="texts.timeStamp" :documentID="texts.id"></message-template>
+          </v-card>
+        </div>
+        <br>
+        <br>
+        <br>
+        </v-container>
+        <div class="message-container-mobile">
+          <v-card raised hover class="message-enter-mobile">
+            <messenger></messenger>
+          </v-card>
+        </div>
       </div>
-      <div class="message-container">
-        <v-card raised hover class="message-enter">
-          <messenger></messenger>
-        </v-card>
-      </div>
+
     </div>
 </template>
 <script>
@@ -48,12 +70,18 @@ export default {
       messages: [],
       title: 'Clatterer',
       clipped: true,
-      drawer: false
+      drawer: false,
+      isMobile: false
     }
   },
   firestore () {
     return {
       messages: db.collection('chats').doc('chat 1').collection('messageData').orderBy('timeStamp')
+    }
+  },
+  mounted () {
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+      this.isMobile = true
     }
   }
 }
@@ -61,6 +89,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.mes-container {
+  padding-top: 2%;
+  transform: translateY(8%);
+  height: 95vh;
+  overflow-y: scroll;
+}
 .message-holder {
   z-index: 2;
   padding-left: 3%;
@@ -74,15 +108,32 @@ export default {
   display: flex;
   justify-content: center;
 }
-.mes-container {
-  padding-top: 2%;
-  transform: translateY(8%);
-  height: 95vh;
-  overflow-y: scroll;
-}
 .message-enter {
   z-index: -1;
   width: 96%;
   bottom: 4vh;
+}
+
+.mes-container-mobile {
+  scroll-behavior: smooth;
+}
+.message-holder-mobile {
+  padding-left: 3%;
+  padding-right: 3%;
+  padding-bottom: 1%;
+}
+.message-container-mobile {
+  display: flex;
+  justify-content: center;
+}
+.message-enter-mobile {
+  position: fixed;
+  bottom: 0px;
+  width: 96%;
+  justify-content: center;
+  padding-left: 2%;
+  padding-right: 2%;
+  padding-top: .5%;
+  margin-bottom: 1%;
 }
 </style>
