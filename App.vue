@@ -10,7 +10,9 @@
 export default {
   name: 'App',
   mounted () {
-    document.documentElement.style.overflow = 'hidden'
+    if (!(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
+      document.documentElement.style.overflow = 'hidden'
+    }
   }
 }
 </script>

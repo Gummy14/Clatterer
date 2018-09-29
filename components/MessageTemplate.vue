@@ -1,5 +1,5 @@
 <template>
-    <div class="message-template">
+    <div>
       <span class="name-and-react">
         <h3 class="user">Alex Helm
           <v-btn @click="dialogue = true" class="react-button" flat icon><font-awesome-icon class="react-button" icon="plus-circle"/></v-btn>

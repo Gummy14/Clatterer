@@ -115,7 +115,7 @@ export default {
 }
 
 .mes-container-mobile {
-  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 .message-holder-mobile {
   padding-left: 3%;
