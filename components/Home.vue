@@ -15,7 +15,7 @@
         </v-toolbar>
       </div>
       <div class="mes-container">
-        <br>
+      <br>
       <div v-for="(texts, id) in messages" :key="id" class="message-holder">
         <v-card raised>
           <message-template :messageText="texts.messageText" :imageUrl="texts.imageMessage" :reacts="texts.reacts" :timeStamp="texts.timeStamp" :documentID="texts.id"></message-template>
@@ -76,12 +76,13 @@ export default {
   justify-content: center;
 }
 .mes-container {
+  transform: translateY(7vh);
   height: 94vh;
   overflow-y: scroll;
 }
 .message-enter {
   z-index: -1;
   width: 96%;
-  bottom: 10vh;
+  bottom: 4vh;
 }
 </style>
