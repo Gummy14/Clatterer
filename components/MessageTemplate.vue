@@ -41,7 +41,6 @@ export default {
     'documentID'
   ],
   mounted () {
-    window.scrollTo(0, document.body.scrollHeight)
     this.messageTimeStamp = this.timeStamp
   },
   methods: {

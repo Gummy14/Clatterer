@@ -36,7 +36,7 @@
       </div>
 
       <div v-if="isMobile">
-        <v-container class="mes-container-mobile">
+        <v-container id="container" class="mes-container-mobile">
         <div v-for="(texts, id) in messages" :key="id" class="message-holder-mobile">
           <v-card raised>
             <message-template :messageText="texts.messageText" :imageUrl="texts.imageMessage" :reacts="texts.reacts" :timeStamp="texts.timeStamp" :documentID="texts.id"></message-template>
@@ -83,6 +83,13 @@ export default {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
       this.isMobile = true
     }
+  },
+  watch: {
+    messages: function (val) {
+      // console.log('here')
+      var container = document.getElementById('container')
+      container.scrollTop = container.clientHeight
+    }
   }
 }
 </script>
@@ -91,8 +98,7 @@ export default {
 <style scoped>
 .mes-container {
   padding-top: 2%;
-  transform: translateY(8%);
-  height: 95vh;
+  height: 93.5vh;
   overflow-y: scroll;
 }
 .message-holder {
@@ -111,7 +117,7 @@ export default {
 .message-enter {
   z-index: -1;
   width: 96%;
-  bottom: 4vh;
+  bottom: 10vh;
 }
 
 .mes-container-mobile {
