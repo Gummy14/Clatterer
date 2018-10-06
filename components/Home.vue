@@ -16,17 +16,17 @@
       </div>
 
       <div v-if="!isMobile">
-        <div class="mes-container">
-        <div v-for="(texts, id) in messages" :key="id" class="message-holder">
-          <v-card raised>
-            <message-template :messageText="texts.messageText" :imageUrl="texts.imageMessage" :reacts="texts.reacts" :timeStamp="texts.timeStamp" :documentID="texts.id"></message-template>
-          </v-card>
-        </div>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
+        <div id="container" class="mes-container">
+          <div v-for="(texts, id) in messages" :key="id" class="message-holder">
+            <v-card raised>
+              <message-template v-on:newMessage="scrollToBottom()" :messageText="texts.messageText" :imageUrl="texts.imageMessage" :reacts="texts.reacts" :timeStamp="texts.timeStamp" :documentID="texts.id"></message-template>
+            </v-card>
+          </div>
+          <br>
+          <br>
+          <br>
+          <br>
+          <br>
         </div>
         <div class="message-container">
           <v-card raised hover class="message-enter">
@@ -36,16 +36,16 @@
       </div>
 
       <div v-if="isMobile">
-        <v-container id="container" class="mes-container-mobile">
-        <div v-for="(texts, id) in messages" :key="id" class="message-holder-mobile">
-          <v-card raised>
-            <message-template :messageText="texts.messageText" :imageUrl="texts.imageMessage" :reacts="texts.reacts" :timeStamp="texts.timeStamp" :documentID="texts.id"></message-template>
-          </v-card>
+        <div id="container" class="mes-container-mobile">
+          <div v-for="(texts, id) in messages" :key="id" class="message-holder-mobile">
+            <v-card raised>
+              <message-template v-on:newMessage="scrollToBottom()" :messageText="texts.messageText" :imageUrl="texts.imageMessage" :reacts="texts.reacts" :timeStamp="texts.timeStamp" :documentID="texts.id"></message-template>
+            </v-card>
+          </div>
+          <br>
+          <br>
+          <br>
         </div>
-        <br>
-        <br>
-        <br>
-        </v-container>
         <div class="message-container-mobile">
           <v-card raised hover class="message-enter-mobile">
             <messenger></messenger>
@@ -84,11 +84,14 @@ export default {
       this.isMobile = true
     }
   },
-  watch: {
-    messages: function (val) {
-      // console.log('here')
-      var container = document.getElementById('container')
-      container.scrollTop = container.clientHeight
+  methods: {
+    scrollToBottom () {
+      if (this.isMobile) {
+        window.scrollTo(0, document.body.scrollHeight)
+      } else {
+        var objDiv = document.getElementById('container')
+        objDiv.scrollTop = objDiv.scrollHeight
+      }
     }
   }
 }
@@ -121,7 +124,7 @@ export default {
 }
 
 .mes-container-mobile {
-  -webkit-overflow-scrolling: touch;
+  padding-top: 2%;
 }
 .message-holder-mobile {
   padding-left: 3%;
@@ -140,6 +143,6 @@ export default {
   padding-left: 2%;
   padding-right: 2%;
   padding-top: .5%;
-  margin-bottom: 1%;
+  margin-bottom: 2%;
 }
 </style>

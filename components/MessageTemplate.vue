@@ -41,6 +41,7 @@ export default {
     'documentID'
   ],
   mounted () {
+    this.$emit('newMessage')
     this.messageTimeStamp = this.timeStamp
   },
   methods: {
