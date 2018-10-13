@@ -4,6 +4,7 @@ import Home from '@/components/Home'
 import Messenger from '@/components/Messenger'
 import MessageTemplate from '@/components/MessageTemplate'
 import ReactSelection from '@/components/ReactSelection'
+import CreateAccount from '@/components/CreateAccount'
 import Login from '@/components/Login'
 
 Vue.use(Router)
@@ -11,7 +12,15 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
+      path: '*',
+      redirect: '/'
+    },
+    {
       path: '/',
+      redirect: '/login'
+    },
+    {
+      path: '/login',
       name: 'login',
       component: Login
     },
@@ -19,6 +28,11 @@ export default new Router({
       path: '/home',
       name: 'home',
       component: Home
+    },
+    {
+      path: '/createAccount',
+      name: 'create-account',
+      component: CreateAccount
     },
     {
       path: '/messenger',

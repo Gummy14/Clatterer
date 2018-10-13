@@ -7,6 +7,11 @@
       fixed
       app
     >
+      <v-list class="pt-0">
+        <h3 class="username">{{ user }}</h3>
+        <v-divider></v-divider>
+        <v-btn flat @click="logOut"><font-awesome-icon icon="sign-out-alt" class="logout-icon"/>Log Out</v-btn>
+      </v-list>
     </v-navigation-drawer>
       <div class="toolbar">
         <v-toolbar fixed app :clipped-left="clipped" color="purple darken-3">
@@ -18,8 +23,8 @@
       <div v-if="!isMobile">
         <div id="container" class="mes-container">
           <div v-for="(texts, id) in messages" :key="id" class="message-holder">
-            <v-card raised>
-              <message-template v-on:newMessage="scrollToBottom()" :messageText="texts.messageText" :imageUrl="texts.imageMessage" :reacts="texts.reacts" :timeStamp="texts.timeStamp" :documentID="texts.id"></message-template>
+            <v-card raised hover>
+              <message-template v-on:newMessage="scrollToBottom()" :user="texts.user" :messageText="texts.messageText" :imageUrl="texts.imageMessage" :reacts="texts.reacts" :timeStamp="texts.timeStamp" :documentID="texts.id"></message-template>
             </v-card>
           </div>
           <br>
@@ -39,7 +44,7 @@
         <div id="container" class="mes-container-mobile">
           <div v-for="(texts, id) in messages" :key="id" class="message-holder-mobile">
             <v-card raised>
-              <message-template v-on:newMessage="scrollToBottom()" :messageText="texts.messageText" :imageUrl="texts.imageMessage" :reacts="texts.reacts" :timeStamp="texts.timeStamp" :documentID="texts.id"></message-template>
+              <message-template v-on:newMessage="scrollToBottom()" :user="texts.user" :messageText="texts.messageText" :imageUrl="texts.imageMessage" :reacts="texts.reacts" :timeStamp="texts.timeStamp" :documentID="texts.id"></message-template>
             </v-card>
           </div>
           <br>
@@ -92,6 +97,17 @@ export default {
         var objDiv = document.getElementById('container')
         objDiv.scrollTop = objDiv.scrollHeight
       }
+    },
+    logOut () {
+      this.$store.commit('setUser', {
+        User: ''
+      })
+      this.$router.push('/')
+    }
+  },
+  computed: {
+    user () {
+      return this.$store.getters.currentUser
     }
   }
 }
@@ -144,5 +160,11 @@ export default {
   padding-right: 2%;
   padding-top: .5%;
   margin-bottom: 2%;
+}
+.logout-icon {
+  margin: 5%;
+}
+.username {
+  margin: 2%;
 }
 </style>

@@ -7,17 +7,21 @@ import 'vuetify/dist/vuetify.min.css'
 import Vuetify from 'vuetify'
 import '../node_modules/vuetify/src/stylus/app.styl'
 import VueFire from 'vuefire'
-import firebase from 'firebase/app'
+import firebase from 'firebase'
 import 'firebase/firestore'
 import 'firebase/storage'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faPlusSquare, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
+import { faPlusSquare, faPlusCircle, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { store } from './store'
 
 Vue.use(Vuetify)
 
 Vue.use(VueFire)
 firebase.initializeApp({
+  apiKey: 'AIzaSyCq63oosrG4EduRNtu5TO59o6JB46thUog',
+  authDomain: 'clatterer-768ab.firebaseapp.com',
+  messagingSenderId: '1094109932349',
   projectId: 'clatterer-768ab',
   databaseURL: 'https://clatterer-768ab.firebaseio.com',
   storageBucket: 'gs://clatterer-768ab.appspot.com'
@@ -27,6 +31,7 @@ Vue.config.productionTip = false
 export const db = firebase.firestore()
 export const storage = firebase.storage().ref()
 
+library.add(faSignOutAlt)
 library.add(faPlusSquare)
 library.add(faPlusCircle)
 
@@ -39,5 +44,6 @@ new Vue({
   el: '#app',
   router,
   components: { App },
+  store,
   template: '<App/>'
 })

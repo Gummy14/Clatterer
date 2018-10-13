@@ -21,6 +21,7 @@ export default {
   },
   methods: {
     sendMessage (messageText, reacts) {
+      var user = this.user
       var timeStamp = new Date()
       var imageMessage = this.imageUrl
       if (this.image != null) {
@@ -28,7 +29,7 @@ export default {
         this.image = null
         this.imageUrl = ''
       }
-      db.collection('chats').doc('chat 1').collection('messageData').add({ messageText, imageMessage, timeStamp, reacts })
+      db.collection('chats').doc('chat 1').collection('messageData').add({ user, messageText, imageMessage, timeStamp, reacts })
     },
     openFileDialogue () {
       this.$refs.fileInput.click()
@@ -41,6 +42,11 @@ export default {
       })
       fileReader.readAsDataURL(file[0])
       this.image = file[0]
+    }
+  },
+  computed: {
+    user () {
+      return this.$store.getters.currentUser
     }
   }
 }

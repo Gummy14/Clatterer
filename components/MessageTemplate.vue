@@ -1,7 +1,7 @@
 <template>
     <div>
       <span class="name-and-react">
-        <h3 class="user">Alex Helm
+        <h3 class="user">{{ user }}
           <v-btn @click="dialogue = true" class="react-button" flat icon><font-awesome-icon class="react-button" icon="plus-circle"/></v-btn>
         </h3>
       </span>
@@ -34,6 +34,7 @@ export default {
     }
   },
   props: [
+    'user',
     'messageText',
     'imageUrl',
     'timeStamp',
