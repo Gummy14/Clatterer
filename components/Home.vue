@@ -101,7 +101,8 @@ export default {
     },
     logOut () {
       this.$store.commit('setUser', {
-        User: ''
+        Username: '',
+        Email: ''
       })
       firebase.auth().signOut().then(() => {
         this.$router.push('/')
@@ -110,7 +111,7 @@ export default {
   },
   computed: {
     user () {
-      return this.$store.getters.currentUser
+      return this.$store.getters.currentUsername
     }
   }
 }

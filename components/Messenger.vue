@@ -46,7 +46,7 @@ export default {
   },
   computed: {
     user () {
-      return this.$store.getters.currentUser
+      return this.$store.getters.currentUsername
     }
   }
 }

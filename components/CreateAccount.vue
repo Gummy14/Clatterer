@@ -3,21 +3,23 @@
       <div v-if="!isMobile" class="page">
         <h1 class="title">C L A T T E R E R</h1>
         <v-card raised hover class="login">
-          <v-text-field v-model="user" placeholder=" " label="Enter An Email"></v-text-field>
+          <v-text-field v-model="email" placeholder=" " label="Enter An Email"></v-text-field>
+          <v-text-field v-model="user" placeholder=" " label="Enter A Username"></v-text-field>
           <v-text-field v-model="pass" placeholder=" " label="Enter A Password" type="password"></v-text-field>
           <v-text-field v-model="passConfirm" placeholder=" " label="Confirm Your Password" type="password"></v-text-field>
-          <v-btn @click="createAccountInfo(user, pass, passConfirm)">Confirm</v-btn>
-          <v-alert :value ="arePasswordsDifferent" :type="error" transition="scale-transition">Passwords do not match</v-alert>
+          <v-btn @click="createAccountInfo(email, pass, passConfirm)">Confirm</v-btn>
+          <v-alert :value ="arePasswordsDifferent" type="error" transition="scale-transition">Passwords do not match</v-alert>
         </v-card>
       </div>
       <div v-else class="page-mobile">
         <h1 class="title">C L A T T E R E R</h1>
         <v-card raised hover class="login">
-          <v-text-field v-model="user" placeholder=" " label="Enter An Email"></v-text-field>
+          <v-text-field v-model="email" placeholder=" " label="Enter An Email"></v-text-field>
+          <v-text-field v-model="user" placeholder=" " label="Enter A Username"></v-text-field>
           <v-text-field v-model="pass" placeholder=" " label="Enter A Password" type="password"></v-text-field>
           <v-text-field v-model="passConfirm" placeholder=" " label="Confirm Your Password" type="password"></v-text-field>
-          <v-btn @click="createAccountInfo(user, pass, passConfirm)">Confirm</v-btn>
-          <v-alert :value ="arePasswordsDifferent" :type="error" transition="scale-transition">Passwords do not match</v-alert>
+          <v-btn @click="createAccountInfo(email, pass, passConfirm)">Confirm</v-btn>
+          <v-alert :value ="arePasswordsDifferent" type="error" transition="scale-transition">Passwords do not match</v-alert>
         </v-card>
       </div>
     </div>
@@ -29,6 +31,7 @@ export default {
   data () {
     return {
       isMobile: false,
+      email: null,
       user: null,
       pass: null,
       passConfirm: null,
@@ -36,14 +39,18 @@ export default {
     }
   },
   methods: {
-    createAccountInfo (user, pass, passConfirm) {
+    createAccountInfo (email, pass, passConfirm) {
       if (pass === passConfirm) {
-        firebase.auth().createUserWithEmailAndPassword(user, pass).then(() => {
-          alert('Account has been created!')
-          this.$store.commit('setUser', {
-            User: this.user
+        firebase.auth().createUserWithEmailAndPassword(email, pass).then(() => {
+          firebase.auth().currentUser.updateProfile({displayName: this.user}).then(() => {
+            this.$store.commit('setUser', {
+              Username: this.user,
+              Email: this.email
+            })
+            console.log(firebase.auth().currentUser)
+            alert('Account has been created!')
+            this.$router.push('/home')
           })
-          this.$router.push('/home')
         })
       } else {
         this.arePasswordsDifferent = true

@@ -3,7 +3,7 @@
       <div v-if="!isMobile" class="page">
         <h1 class="title">C L A T T E R E R</h1>
         <v-card raised hover class="login">
-          <v-text-field v-model="user" placeholder=" " label="Username/Email"></v-text-field>
+          <v-text-field v-model="email" placeholder=" " label="Email"></v-text-field>
           <v-text-field v-model="pass" placeholder=" " label="Password" type="password"></v-text-field>
           <v-btn @click="logIn">Log In</v-btn>
           <v-btn @click="createAccount" class="createAccount">Create An Account</v-btn>
@@ -13,7 +13,7 @@
       <div v-else class="page-mobile">
         <h1 class="title">C L A T T E R E R</h1>
         <v-card raised hover class="login">
-          <v-text-field v-model="user" placeholder=" " label="Username/Email"></v-text-field>
+          <v-text-field v-model="email" placeholder=" " label="Email"></v-text-field>
           <v-text-field v-model="pass" placeholder=" " label="Password" type="password"></v-text-field>
           <v-btn @click="logIn">Log In</v-btn>
           <v-btn @click="createAccount" class="createAccount">Create An Account</v-btn>
@@ -32,14 +32,15 @@ export default {
   },
   methods: {
     logIn () {
-      if (this.user !== null && this.pass !== null) {
-        firebase.auth().signInWithEmailAndPassword(this.user, this.pass)
+      if (this.email !== null && this.pass !== null) {
+        firebase.auth().signInWithEmailAndPassword(this.email, this.pass)
         .then(() => {
           this.didLogIn = true
           this.LogInResult = 'success'
           this.LogInMessage = 'Log In Successful!'
           this.$store.commit('setUser', {
-            User: this.user
+            Username: firebase.auth().currentUser.displayName,
+            Email: firebase.auth().currentUser.email
           })
           this.$router.push('/home')
         })
@@ -61,7 +62,7 @@ export default {
   data () {
     return {
       isMobile: false,
-      user: null,
+      email: null,
       pass: null,
       didLogIn: false,
       LogInResult: null,
