@@ -61,6 +61,7 @@
     </div>
 </template>
 <script>
+import firebase from 'firebase'
 import Messenger from './Messenger.vue'
 import MessageTemplate from './MessageTemplate.vue'
 import { db } from '../main'
@@ -102,7 +103,9 @@ export default {
       this.$store.commit('setUser', {
         User: ''
       })
-      this.$router.push('/')
+      firebase.auth().signOut().then(() => {
+        this.$router.push('/')
+      })
     }
   },
   computed: {

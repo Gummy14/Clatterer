@@ -31,7 +31,7 @@ export default {
       isMobile: false,
       user: null,
       pass: null,
-      passConfirm: false,
+      passConfirm: null,
       arePasswordsDifferent: false
     }
   },
@@ -40,6 +40,9 @@ export default {
       if (pass === passConfirm) {
         firebase.auth().createUserWithEmailAndPassword(user, pass).then(() => {
           alert('Account has been created!')
+          this.$store.commit('setUser', {
+            User: this.user
+          })
           this.$router.push('/home')
         })
       } else {

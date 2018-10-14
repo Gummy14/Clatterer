@@ -6,10 +6,11 @@ import MessageTemplate from '@/components/MessageTemplate'
 import ReactSelection from '@/components/ReactSelection'
 import CreateAccount from '@/components/CreateAccount'
 import Login from '@/components/Login'
+import firebase from 'firebase'
 
 Vue.use(Router)
 
-export default new Router({
+let router = new Router({
   routes: [
     {
       path: '*',
@@ -27,7 +28,10 @@ export default new Router({
     {
       path: '/home',
       name: 'home',
-      component: Home
+      component: Home,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/createAccount',
@@ -51,3 +55,19 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  let user = firebase.auth().currentUser
+  console.log(user)
+  let requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+
+  if (requiresAuth && !user) {
+    next('/login')
+  } else if (!requiresAuth && user) {
+    next('/home')
+  } else {
+    next()
+  }
+})
+
+export default router
