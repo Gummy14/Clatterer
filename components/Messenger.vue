@@ -2,7 +2,7 @@
     <span class="messenger">
       <input id="fileUploader" type="file" ref="fileInput" @change="getFile">
       <v-btn v-on:click="openFileDialogue()" flat icon><font-awesome-icon icon="plus-square"/></v-btn>
-      <v-text-field v-model="messageText"></v-text-field>
+      <v-text-field @keypress.native.enter="enterPress" v-model="messageText"></v-text-field>
       <v-btn v-on:click="sendMessage(messageText, reacts)">Send</v-btn>
     </span>
 </template>
@@ -20,7 +20,11 @@ export default {
     }
   },
   methods: {
+    enterPress () {
+      this.sendMessage(this.messageText, this.reacts)
+    },
     sendMessage (messageText, reacts) {
+      this.messageText = ''
       var user = this.user
       var timeStamp = new Date()
       var imageMessage = this.imageUrl
