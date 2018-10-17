@@ -141,6 +141,7 @@ export default {
   z-index: -1;
   width: 96%;
   bottom: 10vh;
+  padding-bottom: 1%;
 }
 
 .mes-container-mobile {

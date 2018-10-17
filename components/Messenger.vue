@@ -1,10 +1,21 @@
 <template>
-    <span class="messenger">
-      <input id="fileUploader" type="file" ref="fileInput" @change="getFile">
-      <v-btn v-on:click="openFileDialogue()" flat icon><font-awesome-icon icon="plus-square"/></v-btn>
-      <v-text-field @keypress.native.enter="enterPress" v-model="messageText"></v-text-field>
-      <v-btn v-on:click="sendMessage(messageText, reacts)">Send</v-btn>
-    </span>
+    <div>
+      <v-dialog v-model="imageSelected" class="image-dialog" max-width="50vh">
+        <v-card>
+          <img class="image-prev" :src="imageUrl">
+          <span class="messenger-dialog">
+            <v-text-field counter="250" maxlength="250" @keypress.native.enter="enterPress" v-model="messageText"></v-text-field>
+            <v-btn v-on:click="sendMessage(messageText, reacts)">Send</v-btn>
+          </span>
+        </v-card>
+      </v-dialog>
+      <span class="messenger">
+        <input id="fileUploader" type="file" ref="fileInput" @change="getFile">
+        <v-btn v-on:click="openFileDialogue()" flat icon><font-awesome-icon icon="plus-square"/></v-btn>
+        <v-text-field counter="250" maxlength="250" @keypress.native.enter="enterPress" v-model="messageText"></v-text-field>
+        <v-btn v-on:click="sendMessage(messageText, reacts)">Send</v-btn>
+      </span>
+    </div>
 </template>
 <script>
 import { db, storage } from '../main'
@@ -16,7 +27,8 @@ export default {
       messageText: '',
       imageUrl: '',
       image: null,
-      reacts: []
+      reacts: [],
+      imageSelected: false
     }
   },
   methods: {
@@ -24,6 +36,7 @@ export default {
       this.sendMessage(this.messageText, this.reacts)
     },
     sendMessage (messageText, reacts) {
+      this.imageSelected = false
       this.messageText = ''
       var user = this.user
       var timeStamp = new Date()
@@ -46,6 +59,7 @@ export default {
       })
       fileReader.readAsDataURL(file[0])
       this.image = file[0]
+      this.imageSelected = true
     }
   },
   computed: {
@@ -63,5 +77,20 @@ export default {
 }
 .messenger {
   display: flex;
+}
+.image-prev {
+  max-width: 50vh;
+  max-height: 50vh;
+  display: block;
+  margin: auto;
+  padding: 2%;
+}
+.image-dialog {
+  max-width: 50%;
+}
+.messenger-dialog {
+  display: flex;
+  padding-left: 2.5%;
+  padding-bottom: 2%;
 }
 </style>
