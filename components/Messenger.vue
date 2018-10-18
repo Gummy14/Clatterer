@@ -37,18 +37,20 @@ export default {
       this.sendMessage(message, this.reacts)
     },
     sendMessage (messageText, reacts) {
-      this.imageSelected = false
-      this.messageText = ''
-      this.messageTextDialog = ''
-      var user = this.user
-      var timeStamp = new Date()
-      var imageMessage = this.imageUrl
-      if (this.image != null) {
-        storage.child('uploadedImages/' + timeStamp.toString()).put(this.image)
-        this.image = null
-        this.imageUrl = ''
+      if (messageText !== '') {
+        this.imageSelected = false
+        this.messageText = ''
+        this.messageTextDialog = ''
+        var user = this.user
+        var timeStamp = new Date()
+        var imageMessage = this.imageUrl
+        if (this.image != null) {
+          storage.child('uploadedImages/' + timeStamp.toString()).put(this.image)
+          this.image = null
+          this.imageUrl = ''
+        }
+        db.collection('chats').doc('chat 1').collection('messageData').add({ user, messageText, imageMessage, timeStamp, reacts })
       }
-      db.collection('chats').doc('chat 1').collection('messageData').add({ user, messageText, imageMessage, timeStamp, reacts })
     },
     openFileDialogue () {
       this.$refs.fileInput.click()

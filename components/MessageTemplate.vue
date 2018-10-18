@@ -77,8 +77,7 @@ export default {
   float: right;
 }
 .reaction {
-    width: 32px;
-    height: 32px;
+    max-height: 32px;
     padding-top: .25%;
     padding-bottom: .25%;
     padding-left: .5%;
