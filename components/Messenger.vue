@@ -4,15 +4,15 @@
         <v-card>
           <img class="image-prev" :src="imageUrl">
           <span class="messenger-dialog">
-            <v-text-field counter="250" maxlength="250" @keypress.native.enter="enterPress" v-model="messageText"></v-text-field>
-            <v-btn v-on:click="sendMessage(messageText, reacts)">Send</v-btn>
+            <v-text-field counter="250" maxlength="250" @keypress.native.enter="enterPress(messageTextDialog)" v-model="messageTextDialog"></v-text-field>
+            <v-btn v-on:click="sendMessage(messageTextDialog, reacts)">Send</v-btn>
           </span>
         </v-card>
       </v-dialog>
       <span class="messenger">
-        <input id="fileUploader" type="file" ref="fileInput" @change="getFile">
+        <input id="fileUploader" accept="image/jpg, image/jpeg, image/png" type="file" ref="fileInput" @change="getFile">
         <v-btn v-on:click="openFileDialogue()" flat icon><font-awesome-icon icon="plus-square"/></v-btn>
-        <v-text-field counter="250" maxlength="250" @keypress.native.enter="enterPress" v-model="messageText"></v-text-field>
+        <v-text-field counter="250" maxlength="250" @keypress.native.enter="enterPress(messageText)" v-model="messageText"></v-text-field>
         <v-btn v-on:click="sendMessage(messageText, reacts)">Send</v-btn>
       </span>
     </div>
@@ -25,6 +25,7 @@ export default {
     return {
       message: [],
       messageText: '',
+      messageTextDialog: '',
       imageUrl: '',
       image: null,
       reacts: [],
@@ -32,21 +33,24 @@ export default {
     }
   },
   methods: {
-    enterPress () {
-      this.sendMessage(this.messageText, this.reacts)
+    enterPress (message) {
+      this.sendMessage(message, this.reacts)
     },
     sendMessage (messageText, reacts) {
-      this.imageSelected = false
-      this.messageText = ''
-      var user = this.user
-      var timeStamp = new Date()
-      var imageMessage = this.imageUrl
-      if (this.image != null) {
-        storage.child('uploadedImages/' + timeStamp.toString()).put(this.image)
-        this.image = null
-        this.imageUrl = ''
+      if (this.messageText !== '' || this.imageUrl !== '') {
+        this.imageSelected = false
+        this.messageText = ''
+        this.messageTextDialog = ''
+        var user = this.user
+        var timeStamp = new Date()
+        var imageMessage = this.imageUrl
+        if (this.image != null) {
+          storage.child('uploadedImages/' + timeStamp.toString()).put(this.image)
+          this.image = null
+          this.imageUrl = ''
+        }
+        db.collection('chats').doc('chat 1').collection('messageData').add({ user, messageText, imageMessage, timeStamp, reacts })
       }
-      db.collection('chats').doc('chat 1').collection('messageData').add({ user, messageText, imageMessage, timeStamp, reacts })
     },
     openFileDialogue () {
       this.$refs.fileInput.click()
