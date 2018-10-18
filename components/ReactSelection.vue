@@ -1,12 +1,12 @@
 <template>
     <v-card>
       <div v-for="(reactions, id) in reactDocInFirebaseStorage" :key="id">
-        <span v-for="reactIcons in reactions.customReacts" :key="reactIcons">
-        <v-btn class="react-button" v-on:click="closeDialogueBox(reactIcons)"><img class="react-icon" :src="reactIcons"></v-btn>
-        </span>
+        <div v-for="reactIcons in reactions.customReacts" :key="reactIcons" class="react-holder">
+          <v-btn flat class="react-button" v-on:click="closeDialogueBox(reactIcons)"><img class="react-icon" :src="reactIcons"></v-btn>
+        </div>
       </div>
       <v-spacer></v-spacer>
-      <input id="fileUploader" type="file" ref="fileInput" @change="getFile">
+      <input id="fileUploader" accept="image/jpg, image/jpeg, image/png" type="file" ref="fileInput" @change="getFile">
       <v-btn v-on:click="openFileDialogue()">Add React</v-btn>
     </v-card>
 </template>
@@ -29,7 +29,6 @@ export default {
       fileReader.addEventListener('load', () => {
         this.addedReactUrl = fileReader.result
         this.reactDocInFirebaseStorage.forEach(CustomReacts => {
-          console.log('here', CustomReacts.customReacts)
           CustomReacts.customReacts.push(this.addedReactUrl)
           this.updatedReacts = CustomReacts.customReacts
         })
@@ -72,12 +71,10 @@ export default {
   display: none;
 }
 .react-icon {
-    width: 32px;
-    height: 32px;
+    max-height: 32px;
 }
-.react-button {
-    min-width: 0px;
-    width: 32px;
-    height: 32px;
+.react-holder {
+  max-height: 290px;
+  overflow: auto;
 }
 </style>

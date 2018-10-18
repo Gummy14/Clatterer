@@ -163,6 +163,7 @@ export default {
   justify-content: center;
   padding-left: 2%;
   padding-right: 2%;
+  padding-bottom: 1%;
   padding-top: .5%;
   margin-bottom: 2%;
 }
