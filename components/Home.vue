@@ -50,6 +50,8 @@
           <br>
           <br>
           <br>
+          <br>
+          <br>
         </div>
         <div class="message-container-mobile">
           <v-card raised hover class="message-enter-mobile">

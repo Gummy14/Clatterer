@@ -47,7 +47,6 @@ export default {
               Username: this.user,
               Email: this.email
             })
-            console.log(firebase.auth().currentUser)
             alert('Account has been created!')
             this.$router.push('/home')
           })
