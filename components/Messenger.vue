@@ -37,13 +37,13 @@ export default {
       this.sendMessage(message, this.reacts)
     },
     sendMessage (messageText, reacts) {
-      if (messageText !== '') {
+      if (this.messageText !== '') {
         this.imageSelected = false
         this.messageText = ''
         this.messageTextDialog = ''
         var user = this.user
         var timeStamp = new Date()
-        var imageMessage = this.imageUrl
+        let imageMessage = this.imageUrl
         if (this.image != null) {
           storage.child('uploadedImages/' + timeStamp.toString()).put(this.image)
           this.image = null

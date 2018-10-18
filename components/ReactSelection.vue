@@ -6,7 +6,7 @@
         </div>
       </div>
       <v-spacer></v-spacer>
-      <input id="fileUploader" type="file" ref="fileInput" @change="getFile">
+      <input id="fileUploader" accept="image/jpg, image/jpeg, image/png" type="file" ref="fileInput" @change="getFile">
       <v-btn v-on:click="openFileDialogue()">Add React</v-btn>
     </v-card>
 </template>
