@@ -10,7 +10,7 @@
         </v-card>
       </v-dialog>
       <span class="messenger">
-        <input id="fileUploader" accept="image/jpg, image/jpeg, image/png" type="file" ref="fileInput" @change="getFile">
+        <input id="fileUploader" accept="image/*" type="file" ref="fileInput" @change="getFile">
         <v-btn v-on:click="openFileDialogue()" flat icon><font-awesome-icon icon="plus-square"/></v-btn>
         <v-text-field counter="250" maxlength="250" @keypress.native.enter="enterPress(messageText)" v-model="messageText"></v-text-field>
         <v-btn v-on:click="sendMessage(messageText, reacts)">Send</v-btn>
@@ -45,11 +45,18 @@ export default {
         var timeStamp = new Date()
         var imageMessage = this.imageUrl
         if (this.image != null) {
-          storage.child('uploadedImages/' + timeStamp.toString()).put(this.image)
-          this.image = null
-          this.imageUrl = ''
+          storage.child('uploadedImages/' + timeStamp.toString()).put(this.image).then(fileData => {
+            storage.child('uploadedImages/' + timeStamp.toString()).getDownloadURL().then(function (url) {
+              imageMessage = url
+              db.collection('chats').doc('chat 1').collection('messageData').add({ user, messageText, imageMessage, timeStamp, reacts })
+            })
+          }).then(() => {
+            this.image = null
+            this.imageUrl = ''
+          })
+        } else {
+          db.collection('chats').doc('chat 1').collection('messageData').add({ user, messageText, imageMessage, timeStamp, reacts })
         }
-        db.collection('chats').doc('chat 1').collection('messageData').add({ user, messageText, imageMessage, timeStamp, reacts })
       }
     },
     openFileDialogue () {

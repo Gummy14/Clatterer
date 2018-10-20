@@ -6,7 +6,7 @@
         </div>
       </div>
       <v-spacer></v-spacer>
-      <input id="fileUploader" accept="image/jpg, image/jpeg, image/png" type="file" ref="fileInput" @change="getFile">
+      <input id="fileUploader" accept="image/*" type="file" ref="fileInput" @change="getFile">
       <v-btn v-on:click="openFileDialogue()">Add React</v-btn>
     </v-card>
 </template>
@@ -28,21 +28,27 @@ export default {
       const fileReader = new FileReader()
       fileReader.addEventListener('load', () => {
         this.addedReactUrl = fileReader.result
-        this.reactDocInFirebaseStorage.forEach(CustomReacts => {
-          CustomReacts.customReacts.push(this.addedReactUrl)
-          this.updatedReacts = CustomReacts.customReacts
-        })
-        db.collection('chats').doc('chat 1').collection('reactIcons').doc('CustomReacts').set({customReacts: this.updatedReacts})
       })
       fileReader.readAsDataURL(file[0])
       this.addedReact = file[0]
-
+      this.addReact()
+    },
+    addReact () {
       var timeStamp = new Date()
-      if (this.addedReact != null) {
-        storage.child('reactIcons/' + timeStamp.toString()).put(this.addedReact)
+      var reactDoc = this.reactDocInFirebaseStorage
+      var updateReactDoc = this.updatedReacts
+      storage.child('reactIcons/' + timeStamp.toString()).put(this.addedReact).then(fileData => {
+        storage.child('reactIcons/' + timeStamp.toString()).getDownloadURL().then(function (url) {
+          reactDoc.forEach(CustomReacts => {
+            CustomReacts.customReacts.push(url)
+            updateReactDoc = CustomReacts.customReacts
+          })
+          db.collection('chats').doc('chat 1').collection('reactIcons').doc('CustomReacts').set({customReacts: updateReactDoc})
+        })
+      }).then(() => {
         this.addedReact = null
         this.addedReactUrl = ''
-      }
+      })
     }
   },
   data () {
