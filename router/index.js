@@ -4,6 +4,7 @@ import Home from '@/components/Home'
 import Messenger from '@/components/Messenger'
 import MessageTemplate from '@/components/MessageTemplate'
 import ReactSelection from '@/components/ReactSelection'
+import ColorSelection from '@/components/ColorSelection'
 import CreateAccount from '@/components/CreateAccount'
 import Login from '@/components/Login'
 import firebase from 'firebase'
@@ -52,6 +53,11 @@ let router = new Router({
       path: '/react-selection',
       name: 'react-selection',
       component: ReactSelection
+    },
+    {
+      path: '/color-selection',
+      name: 'color-selection',
+      component: ColorSelection
     }
   ]
 })

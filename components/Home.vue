@@ -10,11 +10,12 @@
       <v-list class="pt-0">
         <h3 class="username">{{ user }}</h3>
         <v-divider></v-divider>
+        <v-btn flat @click="paintDialog = true"><font-awesome-icon icon="paint-brush" class="paint-icon"/>Select Toolbar Color</v-btn>
         <v-btn flat @click="logOut"><font-awesome-icon icon="sign-out-alt" class="logout-icon"/>Log Out</v-btn>
       </v-list>
     </v-navigation-drawer>
       <div class="toolbar">
-        <v-toolbar fixed app :clipped-left="clipped" color="purple darken-3">
+        <v-toolbar fixed app :clipped-left="clipped" :color="color">
           <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
           <v-toolbar-title v-text="title"></v-toolbar-title>
         </v-toolbar>
@@ -59,19 +60,23 @@
           </v-card>
         </div>
       </div>
-
+      <v-dialog v-model="paintDialog" max-width="290">
+        <color-selection v-on:colorPicked="setColor($event)"></color-selection>
+      </v-dialog>
     </div>
 </template>
 <script>
 import firebase from 'firebase'
 import Messenger from './Messenger.vue'
 import MessageTemplate from './MessageTemplate.vue'
+import ColorSelection from './ColorSelection.vue'
 import { db } from '../main'
 export default {
   name: 'home',
   components: {
     Messenger,
-    MessageTemplate
+    MessageTemplate,
+    ColorSelection
   },
   data () {
     return {
@@ -79,7 +84,9 @@ export default {
       title: 'Clatterer',
       clipped: true,
       drawer: false,
-      isMobile: false
+      isMobile: false,
+      color: 'red darken-3',
+      paintDialog: false
     }
   },
   firestore () {
@@ -109,6 +116,10 @@ export default {
       firebase.auth().signOut().then(() => {
         this.$router.push('/')
       })
+    },
+    setColor ($event) {
+      this.color = $event
+      this.paintDialog = false
     }
   },
   computed: {
@@ -171,6 +182,9 @@ export default {
 }
 .logout-icon {
   margin: 5%;
+}
+.paint-icon {
+  margin: 2%;
 }
 .username {
   margin: 2%;
