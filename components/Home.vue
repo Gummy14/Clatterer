@@ -8,7 +8,26 @@
       app
     >
       <v-list class="pt-0">
-        <h3 class="username">{{ user }}</h3>
+        <h2 class="username">{{ user }}</h2>
+        <v-divider></v-divider>
+          <v-list two-line>
+
+            <v-subheader>Your Chats</v-subheader>
+            <template>
+              <div v-for="(chat, index) in allChatDocs" :key="index">
+                <v-list-tile :key="chat.id" avatar @click="openChat(chat.id)">
+                  <v-list-tile-avatar>
+                    <img src="https://cdn.vuetifyjs.com/images/lists/1.jpg">
+                  </v-list-tile-avatar>
+                  <v-list-tile-content>
+                    <v-list-tile-title v-html="chat.id"></v-list-tile-title>
+                    <v-list-tile-sub-title v-html="chat.subtitle"></v-list-tile-sub-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+              </div>
+            </template>
+
+          </v-list>
         <v-divider></v-divider>
         <v-btn flat @click="paintDialog = true"><font-awesome-icon icon="paint-brush" class="paint-icon"/>Select Toolbar Color</v-btn>
         <v-btn flat @click="logOut"><font-awesome-icon icon="sign-out-alt" class="logout-icon"/>Log Out</v-btn>
@@ -17,7 +36,7 @@
       <div class="toolbar">
         <v-toolbar fixed app :clipped-left="clipped" :color="color">
           <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-          <v-toolbar-title v-text="title"></v-toolbar-title>
+          <v-toolbar-title>{{ activeChat }}</v-toolbar-title>
         </v-toolbar>
       </div>
  
@@ -41,11 +60,7 @@
     </div>
 </template>
 <script>
-<<<<<<< Updated upstream
-import firebase from 'firebase'
-=======
 import { firebase } from 'firebase'
->>>>>>> Stashed changes
 import Messenger from './Messenger.vue'
 import MessageTemplate from './MessageTemplate.vue'
 import ColorSelection from './ColorSelection.vue'
@@ -60,17 +75,19 @@ export default {
   data () {
     return {
       messages: [],
-      title: 'Clatterer',
+      allChatDocs: '',
       clipped: true,
       drawer: false,
       isMobile: false,
       color: 'red darken-3',
-      paintDialog: false
+      paintDialog: false,
+      activeChat: 'No Chats Open'
     }
   },
   firestore () {
     return {
-      messages: db.collection('chats').doc('chat 1').collection('messageData').orderBy('timeStamp')
+      messages: db.collection('chats').doc(this.activeChat).collection('messageData').orderBy('timeStamp'),
+      allChatDocs: db.collection('chats')
     }
   },
   mounted () {
@@ -99,8 +116,6 @@ export default {
     setColor ($event) {
       this.color = $event
       this.paintDialog = false
-<<<<<<< Updated upstream
-=======
     },
     openChat (chatID) {
       this.$store.commit('setActiveChat', {
@@ -117,7 +132,6 @@ export default {
       // .catch((error) => {
       //   alert('Could load data for ' +this.activeChat)
       // })
->>>>>>> Stashed changes
     }
   },
   computed: {
@@ -134,7 +148,6 @@ export default {
   position: absolute;
   top: 0px;
   overflow-y: scroll;
-  width: 100%;
   bottom: 95px;
 }
 .message-container {
