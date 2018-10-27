@@ -1,11 +1,11 @@
 <template>
     <div>
       <span class="name-and-react">
-        <h3 class="user">{{ user }}
+        <h3 bold class="user">{{ user }}
           <v-btn @click="dialogue = true" class="react-button" flat icon><font-awesome-icon class="react-button" icon="plus-circle"/></v-btn>
         </h3>
       </span>
-        <h1 class="message">{{ messageText }}</h1>
+        <p class="message">{{ messageText }}</p>
         <div class="image-container">
           <img class="image-style" :src="imageUrl">
         </div>
@@ -60,7 +60,7 @@ export default {
   max-width: 100%;
 }
 .image-style {
-  max-width: 90%;
+  max-width: 50%;
   padding-left: 1%;
   padding-bottom: 1%;
   display: flex;

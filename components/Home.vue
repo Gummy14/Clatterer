@@ -20,42 +20,17 @@
           <v-toolbar-title v-text="title"></v-toolbar-title>
         </v-toolbar>
       </div>
-
-      <div v-if="!isMobile">
+ 
+      <div>
         <div id="container" class="mes-container">
           <div v-for="(texts, id) in messages" :key="id" class="message-holder">
             <v-card raised hover>
               <message-template v-on:newMessage="scrollToBottom()" :user="texts.user" :messageText="texts.messageText" :imageUrl="texts.imageMessage" :reacts="texts.reacts" :timeStamp="texts.timeStamp" :documentID="texts.id"></message-template>
             </v-card>
           </div>
-          <br>
-          <br>
-          <br>
-          <br>
-          <br>
         </div>
         <div class="message-container">
           <v-card raised hover class="message-enter">
-            <messenger></messenger>
-          </v-card>
-        </div>
-      </div>
-
-      <div v-if="isMobile">
-        <div id="container" class="mes-container-mobile">
-          <div v-for="(texts, id) in messages" :key="id" class="message-holder-mobile">
-            <v-card raised>
-              <message-template v-on:newMessage="scrollToBottom()" :user="texts.user" :messageText="texts.messageText" :imageUrl="texts.imageMessage" :reacts="texts.reacts" :timeStamp="texts.timeStamp" :documentID="texts.id"></message-template>
-            </v-card>
-          </div>
-          <br>
-          <br>
-          <br>
-          <br>
-          <br>
-        </div>
-        <div class="message-container-mobile">
-          <v-card raised hover class="message-enter-mobile">
             <messenger></messenger>
           </v-card>
         </div>
@@ -66,7 +41,11 @@
     </div>
 </template>
 <script>
+<<<<<<< Updated upstream
 import firebase from 'firebase'
+=======
+import { firebase } from 'firebase'
+>>>>>>> Stashed changes
 import Messenger from './Messenger.vue'
 import MessageTemplate from './MessageTemplate.vue'
 import ColorSelection from './ColorSelection.vue'
@@ -120,6 +99,25 @@ export default {
     setColor ($event) {
       this.color = $event
       this.paintDialog = false
+<<<<<<< Updated upstream
+=======
+    },
+    openChat (chatID) {
+      this.$store.commit('setActiveChat', {
+        ActiveChat: chatID
+      })
+      db.collection('chats').doc(chatID).set({
+        data: 'data'
+      })
+      this.activeChat = chatID
+      this.$bind('messagesData', db.collection('chats').doc(this.activeChat).collection('messageData').orderBy('timeStamp'))
+      .then((collection) => {
+        this.messages = collection
+      })
+      // .catch((error) => {
+      //   alert('Could load data for ' +this.activeChat)
+      // })
+>>>>>>> Stashed changes
     }
   },
   computed: {
@@ -133,52 +131,23 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .mes-container {
-  padding-top: 2%;
-  height: 93.5vh;
+  position: absolute;
+  top: 0px;
   overflow-y: scroll;
-}
-.message-holder {
-  z-index: 2;
-  padding-left: 3%;
-  padding-right: 3%;
-  padding-bottom: 1%;
+  width: 100%;
+  bottom: 95px;
 }
 .message-container {
-  z-index: 1;
-  position: relative;
-  bottom: 0px;
+  position: absolute;
   display: flex;
-  justify-content: center;
+  justify-content: left;
+  min-height: 95px;
+  width: 100%;
+  bottom: 0px;
 }
 .message-enter {
-  z-index: -1;
-  width: 96%;
-  bottom: 10vh;
-  padding-bottom: 1%;
-}
-
-.mes-container-mobile {
-  padding-top: 2%;
-}
-.message-holder-mobile {
-  padding-left: 3%;
-  padding-right: 3%;
-  padding-bottom: 1%;
-}
-.message-container-mobile {
-  display: flex;
-  justify-content: center;
-}
-.message-enter-mobile {
-  position: fixed;
-  bottom: 0px;
-  width: 96%;
-  justify-content: center;
-  padding-left: 2%;
-  padding-right: 2%;
-  padding-bottom: 1%;
-  padding-top: .5%;
-  margin-bottom: 2%;
+  width: 100vw;
+  padding-top: 1.25vh;
 }
 .logout-icon {
   margin: 5%;
