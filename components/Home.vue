@@ -149,6 +149,7 @@ export default {
   top: 0px;
   overflow-y: scroll;
   bottom: 95px;
+  width: 100%;
 }
 .message-container {
   position: absolute;
