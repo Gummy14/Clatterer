@@ -17,7 +17,7 @@ export default {
   methods: {
     closeDialogueBox (selectedReaction) {
       this.reacts.push(selectedReaction)
-      db.collection('chats').doc('chat 1').collection('messageData').doc(this.documentID).update({reacts: this.reacts})
+      db.collection('chats').doc(this.$store.getters.currentActiveChat).collection('messageData').doc(this.documentID).update({reacts: this.reacts})
       this.$emit('closeDialogueBox')
     },
     openFileDialogue () {
@@ -37,13 +37,14 @@ export default {
       var timeStamp = new Date()
       var reactDoc = this.reactDocInFirebaseStorage
       var updateReactDoc = this.updatedReacts
+      var activeChat = this.$store.getters.currentActiveChat
       storage.child('reactIcons/' + timeStamp.toString()).put(this.addedReact).then(fileData => {
         storage.child('reactIcons/' + timeStamp.toString()).getDownloadURL().then(function (url) {
           reactDoc.forEach(CustomReacts => {
             CustomReacts.customReacts.push(url)
             updateReactDoc = CustomReacts.customReacts
           })
-          db.collection('chats').doc('chat 1').collection('reactIcons').doc('CustomReacts').set({customReacts: updateReactDoc})
+          db.collection('chats').doc(activeChat).collection('reactIcons').doc('CustomReacts').set({customReacts: updateReactDoc})
         })
       }).then(() => {
         this.addedReact = null
@@ -66,7 +67,7 @@ export default {
   ],
   firestore () {
     return {
-      reactDocInFirebaseStorage: db.collection('chats').doc('chat 1').collection('reactIcons')
+      reactDocInFirebaseStorage: db.collection('chats').doc(this.$store.getters.currentActiveChat).collection('reactIcons')
     }
   }
 }

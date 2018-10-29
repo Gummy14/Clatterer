@@ -44,18 +44,19 @@ export default {
         var user = this.user
         var timeStamp = new Date()
         var imageMessage = this.imageUrl
+        var activeChat = this.$store.getters.currentActiveChat
         if (this.image != null) {
           storage.child('uploadedImages/' + timeStamp.toString()).put(this.image).then(fileData => {
             storage.child('uploadedImages/' + timeStamp.toString()).getDownloadURL().then(function (url) {
               imageMessage = url
-              db.collection('chats').doc('chat 1').collection('messageData').add({ user, messageText, imageMessage, timeStamp, reacts })
+              db.collection('chats').doc(activeChat).collection('messageData').add({ user, messageText, imageMessage, timeStamp, reacts })
             })
           }).then(() => {
             this.image = null
             this.imageUrl = ''
           })
         } else {
-          db.collection('chats').doc('chat 1').collection('messageData').add({ user, messageText, imageMessage, timeStamp, reacts })
+          db.collection('chats').doc(this.$store.getters.currentActiveChat).collection('messageData').add({ user, messageText, imageMessage, timeStamp, reacts })
         }
       }
     },

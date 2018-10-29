@@ -5,22 +5,29 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   state: {
-    User: '',
-    Email: ''
+    user: '',
+    email: '',
+    activeChat: ''
   },
   mutations: {
     setUser (state, payload) {
-      state.User = payload.Username
-      state.Email = payload.Email
+      state.user = payload.Username
+      state.email = payload.Email
+    },
+    setActiveChat (state, payload) {
+      state.activeChat = payload.ActiveChat
     }
   },
   actions: {},
   getters: {
     currentUsername (state) {
-      return state.User
+      return state.user
     },
     currentEmail (state) {
-      return state.Email
+      return state.email
+    },
+    currentActiveChat (state) {
+      return state.activeChat
     }
   }
 })

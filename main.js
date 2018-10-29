@@ -11,7 +11,7 @@ import firebase from 'firebase'
 import 'firebase/firestore'
 import 'firebase/storage'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faPlusSquare, faPlusCircle, faSignOutAlt, faPaintBrush } from '@fortawesome/free-solid-svg-icons'
+import { faPlusSquare, faPlusCircle, faSignOutAlt, faPaintBrush, faComments } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { store } from './store'
 
@@ -35,6 +35,7 @@ library.add(faSignOutAlt)
 library.add(faPlusSquare)
 library.add(faPlusCircle)
 library.add(faPaintBrush)
+library.add(faComments)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

@@ -4,7 +4,7 @@
         <h1 class="title">C L A T T E R E R</h1>
         <v-card raised hover class="login">
           <v-text-field v-model="email" placeholder=" " label="Email"></v-text-field>
-          <v-text-field v-model="pass" placeholder=" " label="Password" type="password"></v-text-field>
+          <v-text-field @keypress.native.enter="logIn" v-model="pass" placeholder=" " label="Password" type="password"></v-text-field>
           <v-btn @click="logIn">Log In</v-btn>
           <v-btn @click="createAccount" class="createAccount">Create An Account</v-btn>
           <v-alert :value ="didLogIn" :type="LogInResult" transition="scale-transition">{{ LogInMessage }}</v-alert>
@@ -14,7 +14,7 @@
         <h1 class="title">C L A T T E R E R</h1>
         <v-card raised hover class="login">
           <v-text-field v-model="email" placeholder=" " label="Email"></v-text-field>
-          <v-text-field v-model="pass" placeholder=" " label="Password" type="password"></v-text-field>
+          <v-text-field @keypress.native.enter="logIn" v-model="pass" placeholder=" " label="Password" type="password"></v-text-field>
           <v-btn @click="logIn">Log In</v-btn>
           <v-btn @click="createAccount" class="createAccount">Create An Account</v-btn>
           <v-alert :value ="didLogIn" :type="LogInResult" transition="scale-transition">{{ LogInMessage }}</v-alert>
