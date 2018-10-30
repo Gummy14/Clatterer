@@ -43,7 +43,10 @@
  
       <div>
         <div id="container" class="mes-container">
-          <div v-for="(texts, id) in messages" :key="id" class="message-holder">
+          <div v-if="!activeChat" class="empty-page">
+            <h1>No Chats Open</h1>
+          </div>
+          <div v-else v-for="(texts, id) in messages" :key="id" class="message-holder">
             <v-card raised>
               <message-template v-on:newMessage="scrollToBottom()" :user="texts.user" :messageText="texts.messageText" :imageUrl="texts.imageMessage" :reacts="texts.reacts" :timeStamp="texts.timeStamp" :documentID="texts.id"></message-template>
             </v-card>
@@ -64,7 +67,7 @@
     </div>
 </template>
 <script>
-import { firebase } from 'firebase'
+import firebase from 'firebase'
 import Messenger from './Messenger.vue'
 import MessageTemplate from './MessageTemplate.vue'
 import ColorSelection from './ColorSelection.vue'
@@ -87,7 +90,7 @@ export default {
       isMobile: false,
       color: 'red darken-3',
       paintDialog: false,
-      activeChat: 'No Chats Open',
+      activeChat: '',
       createNewChat: false,
       isNewChat: false
     }
@@ -115,6 +118,9 @@ export default {
       this.$store.commit('setUser', {
         Username: '',
         Email: ''
+      })
+      this.$store.commit('setActiveChat', {
+        ActiveChats: ''
       })
       firebase.auth().signOut().then(() => {
         this.$router.push('/')
@@ -187,5 +193,10 @@ export default {
 }
 .username {
   margin: 2%;
+}
+.empty-page {
+  display: flex;
+  justify-content: center;
+  margin-top: 10%;
 }
 </style>
