@@ -8,7 +8,16 @@
       app
     >
       <v-list class="pt-0">
-        <h2 class="username">{{ user }}</h2>
+        <v-list-tile>
+          <v-list-tile-avatar class="profile-pic">
+            <img src="https://scontent-ort2-1.xx.fbcdn.net/v/t1.0-9/18222629_1355229234556850_5220608942535705447_n.jpg?_nc_cat=108&_nc_ht=scontent-ort2-1.xx&oh=dc05c79449f0d9580412031bed446484&oe=5C7B6AF8">
+          </v-list-tile-avatar>
+          <v-list-tile-content>
+            <v-list-tile-title>
+              <h2 class="username">{{ user }}</h2>
+            </v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
         <v-divider></v-divider>
           <v-list two-line>
 
@@ -170,14 +179,14 @@ export default {
   position: absolute;
   top: 0px;
   overflow-y: scroll;
-  bottom: 95px;
+  bottom: 83px;
   width: 100%;
 }
 .message-container {
   position: absolute;
   display: flex;
   justify-content: left;
-  min-height: 95px;
+  min-height: 83px;
   width: 100%;
   bottom: 0px;
 }
@@ -192,7 +201,7 @@ export default {
   margin: 2%;
 }
 .username {
-  margin: 2%;
+  margin: -.5%;
 }
 .empty-page {
   display: flex;
