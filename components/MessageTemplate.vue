@@ -2,7 +2,7 @@
   <div>
     <v-list-tile class="name-and-react">
       <v-list-tile-avatar class="profile-pic">
-        <img src="https://scontent-ort2-1.xx.fbcdn.net/v/t1.0-9/18222629_1355229234556850_5220608942535705447_n.jpg?_nc_cat=108&_nc_ht=scontent-ort2-1.xx&oh=dc05c79449f0d9580412031bed446484&oe=5C7B6AF8">
+        <img :src="userProfilePicture">
       </v-list-tile-avatar>
       <v-list-tile-content>
         <v-list-tile-title bold class="user"><h3>{{ user }}</h3></v-list-tile-title>
@@ -41,6 +41,7 @@ export default {
   },
   props: [
     'user',
+    'userProfilePicture',
     'messageText',
     'imageUrl',
     'timeStamp',

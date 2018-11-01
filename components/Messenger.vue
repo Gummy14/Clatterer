@@ -42,6 +42,8 @@ export default {
         this.messageText = ''
         this.messageTextDialog = ''
         var user = this.user
+        var userProfilePicture = this.userProfilePicture
+        var userEmail = this.userEmail
         var timeStamp = new Date()
         var imageMessage = this.imageUrl
         var activeChat = this.$store.getters.currentActiveChat
@@ -49,14 +51,14 @@ export default {
           storage.child('uploadedImages/' + timeStamp.toString()).put(this.image).then(fileData => {
             storage.child('uploadedImages/' + timeStamp.toString()).getDownloadURL().then(function (url) {
               imageMessage = url
-              db.collection('chats').doc(activeChat).collection('messageData').add({ user, messageText, imageMessage, timeStamp, reacts })
+              db.collection('chats').doc(activeChat).collection('messageData').add({ user, userProfilePicture, userEmail, messageText, imageMessage, timeStamp, reacts })
             })
           }).then(() => {
             this.image = null
             this.imageUrl = ''
           })
         } else {
-          db.collection('chats').doc(this.$store.getters.currentActiveChat).collection('messageData').add({ user, messageText, imageMessage, timeStamp, reacts })
+          db.collection('chats').doc(this.$store.getters.currentActiveChat).collection('messageData').add({ user, userProfilePicture, userEmail, messageText, imageMessage, timeStamp, reacts })
         }
       }
     },
@@ -77,6 +79,12 @@ export default {
   computed: {
     user () {
       return this.$store.getters.currentUsername
+    },
+    userProfilePicture () {
+      return this.$store.getters.currentProfilePicture
+    },
+    userEmail () {
+      return this.$store.getters.currentEmail
     }
   }
 }

@@ -10,7 +10,7 @@
       <v-list class="pt-0">
         <v-list-tile>
           <v-list-tile-avatar class="profile-pic">
-            <img src="https://scontent-ort2-1.xx.fbcdn.net/v/t1.0-9/18222629_1355229234556850_5220608942535705447_n.jpg?_nc_cat=108&_nc_ht=scontent-ort2-1.xx&oh=dc05c79449f0d9580412031bed446484&oe=5C7B6AF8">
+            <img :src="userProfilePicture">
           </v-list-tile-avatar>
           <v-list-tile-content>
             <v-list-tile-title>
@@ -57,7 +57,14 @@
           </div>
           <div v-else v-for="(texts, id) in messages" :key="id" class="message-holder">
             <v-card raised>
-              <message-template v-on:newMessage="scrollToBottom()" :user="texts.user" :messageText="texts.messageText" :imageUrl="texts.imageMessage" :reacts="texts.reacts" :timeStamp="texts.timeStamp" :documentID="texts.id"></message-template>
+              <message-template v-on:newMessage="scrollToBottom()" 
+              :user="texts.user" 
+              :userProfilePicture="texts.userProfilePicture"
+              :messageText="texts.messageText" 
+              :imageUrl="texts.imageMessage" 
+              :reacts="texts.reacts" 
+              :timeStamp="texts.timeStamp" 
+              :documentID="texts.id"></message-template>
             </v-card>
           </div>
         </div>
@@ -168,6 +175,12 @@ export default {
   computed: {
     user () {
       return this.$store.getters.currentUsername
+    },
+    userProfilePicture () {
+      return this.$store.getters.currentProfilePicture
+    },
+    userEmail () {
+      return this.$store.getters.currentEmail
     }
   }
 }
