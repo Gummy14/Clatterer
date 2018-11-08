@@ -8,7 +8,7 @@
       app
     >
       <v-list class="pt-0">
-        <v-list-tile>
+        <v-list-tile @click="editProfile = true">
           <v-list-tile-avatar class="profile-pic">
             <img :src="userProfilePicture">
           </v-list-tile-avatar>
@@ -43,12 +43,31 @@
         <v-btn flat @click="logOut"><font-awesome-icon icon="sign-out-alt" class="logout-icon"/>Log Out</v-btn>
       </v-list>
     </v-navigation-drawer>
-      <div class="toolbar">
-        <v-toolbar fixed app :clipped-left="clipped" :color="color">
-          <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-          <v-toolbar-title>{{ activeChat }}</v-toolbar-title>
-        </v-toolbar>
-      </div>
+    <v-navigation-drawer
+        right="true"
+        :clipped="clipped"
+        v-model="chatOptions"
+        enable-resize-watcher
+        fixed
+        app
+      >
+      <v-list class="pt-0">
+        <v-list-tile>
+          <v-list-tile-content>
+            <v-list-tile-title>
+              <h2>Users In This Chatroom</h2>
+            </v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+      </v-navigation-drawer>
+
+      <v-toolbar class="toolbar" fixed app :clipped-left="clipped" :color="color">
+        <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+        <v-toolbar-title>{{ activeChat }}</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn icon @click="chatOptions = !chatOptions"><v-icon>more_vert</v-icon></v-btn>
+      </v-toolbar>
  
       <div>
         <div id="container" class="mes-container">
@@ -80,6 +99,9 @@
       <v-dialog v-model="createNewChat" width="45vh">
         <chat-creator v-on:newChat="openNewChat($event)"></chat-creator>
       </v-dialog>
+      <v-dialog v-model="editProfile" width="45vh">
+        <edit-profile v-on:updatedProfile="editProfile = false"></edit-profile>
+      </v-dialog>
     </div>
 </template>
 <script>
@@ -88,6 +110,7 @@ import Messenger from './Messenger.vue'
 import MessageTemplate from './MessageTemplate.vue'
 import ColorSelection from './ColorSelection.vue'
 import ChatCreator from './ChatCreator.vue'
+import EditProfile from './EditProfile.vue'
 import { db } from '../main'
 export default {
   name: 'home',
@@ -95,7 +118,8 @@ export default {
     Messenger,
     MessageTemplate,
     ColorSelection,
-    ChatCreator
+    ChatCreator,
+    EditProfile
   },
   data () {
     return {
@@ -108,7 +132,9 @@ export default {
       paintDialog: false,
       activeChat: '',
       createNewChat: false,
-      isNewChat: false
+      isNewChat: false,
+      editProfile: false,
+      chatOptions: false
     }
   },
   firestore () {
@@ -120,6 +146,11 @@ export default {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
       this.isMobile = true
     }
+    this.$store.commit('setUserInfo', {
+      Username: firebase.auth().currentUser.displayName,
+      Email: firebase.auth().currentUser.email,
+      UserPicture: firebase.auth().currentUser.photoURL
+    })
   },
   methods: {
     scrollToBottom () {
@@ -220,5 +251,8 @@ export default {
   display: flex;
   justify-content: center;
   margin-top: 10%;
+}
+.toolbar {
+  padding-right: 0px !important;
 }
 </style>

@@ -38,10 +38,6 @@ export default {
           this.didLogIn = true
           this.LogInResult = 'success'
           this.LogInMessage = 'Log In Successful!'
-          this.$store.commit('setUser', {
-            Username: firebase.auth().currentUser.displayName,
-            Email: firebase.auth().currentUser.email
-          })
           this.$router.push('/home')
         })
         .catch(() => {

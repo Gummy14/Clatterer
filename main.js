@@ -18,6 +18,7 @@ import { store } from './store'
 Vue.use(Vuetify)
 
 Vue.use(VueFire)
+let app
 firebase.initializeApp({
   apiKey: 'AIzaSyCq63oosrG4EduRNtu5TO59o6JB46thUog',
   authDomain: 'clatterer-768ab.firebaseapp.com',
@@ -40,12 +41,15 @@ library.add(faComments)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.config.productionTip = false
-
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  components: { App },
-  store,
-  template: '<App/>'
+firebase.auth().onAuthStateChanged(function (user) {
+  if (!app) {
+    /* eslint-disable no-new */
+    app = new Vue({
+      el: '#app',
+      router,
+      components: { App },
+      store,
+      template: '<App/>'
+    })
+  }
 })

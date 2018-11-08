@@ -15,6 +15,9 @@ export const store = new Vuex.Store({
       state.user = payload.Username
       state.email = payload.Email
     },
+    setUserName (state, payload) {
+      state.user = payload.Username
+    },
     setUserPicture (state, payload) {
       state.profilePicture = payload.UserPicture
     },
@@ -26,6 +29,11 @@ export const store = new Vuex.Store({
       state.email = ''
       state.activeChat = ''
       state.profilePicture = ''
+    },
+    setUserInfo (state, payload) {
+      state.user = payload.Username
+      state.email = payload.Email
+      state.profilePicture = payload.UserPicture
     }
   },
   actions: {},
