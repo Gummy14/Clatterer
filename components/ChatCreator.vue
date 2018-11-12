@@ -29,18 +29,22 @@ export default {
     createNewRoom () {
       var timeStamp = new Date()
       var chatID = this.chatName
+      var self = this
       storage.child('chatAvatars/' + timeStamp.toString()).put(this.image).then(fileData => {
         storage.child('chatAvatars/' + timeStamp.toString()).getDownloadURL().then(function (url) {
           db.collection('chats').doc(chatID).set({
-            chatAvatar: url
+            chatAvatar: url,
+            users: [self.userEmail],
+            createdOn: timeStamp.toString()
           })
         })
       }).then(() => {
         this.image = null
         this.imageUrl = ''
+        var chatID = this.chatName
         this.chatName = ''
+        this.$emit('newChat', chatID)
       })
-      this.$emit('newChat', this.chatName)
     },
     openFileDialogue () {
       this.$refs.fileInput.click()
@@ -54,6 +58,11 @@ export default {
       fileReader.readAsDataURL(file[0])
       this.image = file[0]
       this.imageSelected = true
+    }
+  },
+  computed: {
+    userEmail () {
+      return this.$store.getters.currentEmail
     }
   }
 }

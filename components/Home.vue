@@ -44,7 +44,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-navigation-drawer
-        right="true"
+        right
         :clipped="clipped"
         v-model="chatOptions"
         enable-resize-watcher
@@ -59,7 +59,17 @@
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
+        <v-divider></v-divider>
       </v-list>
+
+      <div v-for="(user, index) in usersInChat" :key="index">
+        <v-list-tile :key="user.id">
+          <v-list-tile-content>
+            <v-list-tile-title v-html="user"></v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </div>
+
       </v-navigation-drawer>
 
       <v-toolbar class="toolbar" fixed app :clipped-left="clipped" :color="color">
@@ -134,7 +144,8 @@ export default {
       createNewChat: false,
       isNewChat: false,
       editProfile: false,
-      chatOptions: false
+      chatOptions: false,
+      usersInChat: []
     }
   },
   firestore () {
@@ -183,6 +194,7 @@ export default {
         ActiveChat: chatID
       })
       this.activeChat = chatID
+      this.getUsers(chatID)
       this.$bind('messagesData', db.collection('chats').doc(this.activeChat).collection('messageData').orderBy('timeStamp'))
       .then((collection) => {
         this.messages = collection
@@ -197,10 +209,30 @@ export default {
     },
     openNewChat (chatID) {
       this.isNewChat = true
+      var timeStamp = new Date()
+      db.collection('chats').doc(chatID).set({
+        users: [this.userEmail],
+        createdOn: timeStamp.toString()
+      })
       db.collection('chats').doc(chatID).collection('messageData').doc('init').set({
         timeStamp: 'Sun Jul 14 1996 00:00:00 GMT-0400 (Eastern Daylight Time)'
       })
       this.openChat(chatID)
+    },
+    getUsers (chatID) {
+      var self = this
+      var userList = db.collection('chats').doc(chatID)
+      userList.get().then(function (doc) {
+        if (doc.exists) {
+          self.usersInChat = doc.data().users
+          console.log('Document data:', doc.data().users)
+        } else {
+          // doc.data() will be undefined in this case
+          console.log('No such document!')
+        }
+      }).catch(function (error) {
+        console.log('Error getting document:', error)
+      })
     }
   },
   computed: {
