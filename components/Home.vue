@@ -134,7 +134,7 @@ export default {
   data () {
     return {
       messages: [],
-      allChatDocs: '',
+      allChatDocs: [],
       clipped: true,
       drawer: false,
       isMobile: false,
@@ -148,11 +148,6 @@ export default {
       usersInChat: []
     }
   },
-  firestore () {
-    return {
-      allChatDocs: db.collection('chats')
-    }
-  },
   mounted () {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
       this.isMobile = true
@@ -161,6 +156,23 @@ export default {
       Username: firebase.auth().currentUser.displayName,
       Email: firebase.auth().currentUser.email,
       UserPicture: firebase.auth().currentUser.photoURL
+    })
+    var self = this
+    // ok this was a nightmare to figure out, here's how it works
+    // get users list of chats they're in from their profile entry in the database
+    db.collection('userInfo').doc(this.userEmail).get()
+    .then((doc) => {
+      var id
+      // loop through each document reference saved in their 'chats' field
+      for (var i = 0; i < doc.data().chats.length; i++) {
+        // get the id
+        id = doc.data().chats[i].id
+        // then get the chat data, like avatar, timestamp and other users
+        db.doc(doc.data().chats[i].path).get().then((doc) => {
+          // save each one to the allchatdocs array
+          self.allChatDocs.push({id: id, chatAvatar: doc.data().chatAvatar, createdOn: doc.data().createdOn, user: doc.data().users})
+        })
+      }
     })
   },
   methods: {
