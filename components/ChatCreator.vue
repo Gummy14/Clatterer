@@ -22,7 +22,8 @@ export default {
     return {
       chatName: '',
       imageUrl: '',
-      image: null
+      image: null,
+      userChats: []
     }
   },
   methods: {
@@ -36,6 +37,15 @@ export default {
             chatAvatar: url,
             users: [self.userEmail],
             createdOn: timeStamp.toString()
+          }).then(() => {
+            db.collection('userInfo').doc(self.userEmail).get()
+            .then((doc) => {
+              self.userChats = doc.data().chats
+              self.userChats.push(db.collection('chats').doc(chatID))
+              db.collection('userInfo').doc(self.userEmail).set({
+                chats: self.userChats
+              })
+            })
           })
         })
       }).then(() => {

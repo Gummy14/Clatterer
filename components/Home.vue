@@ -162,15 +162,18 @@ export default {
     // get users list of chats they're in from their profile entry in the database
     db.collection('userInfo').doc(this.userEmail).get()
     .then((doc) => {
-      var id
+      var chatId
       // loop through each document reference saved in their 'chats' field
       for (var i = 0; i < doc.data().chats.length; i++) {
         // get the id
-        id = doc.data().chats[i].id
+        chatId = doc.data().chats[i].id
+        console.log('database', doc.data().chats[i].id)
+        console.log('id', chatId)
         // then get the chat data, like avatar, timestamp and other users
         db.doc(doc.data().chats[i].path).get().then((doc) => {
           // save each one to the allchatdocs array
-          self.allChatDocs.push({id: id, chatAvatar: doc.data().chatAvatar, createdOn: doc.data().createdOn, user: doc.data().users})
+          console.log('id in db', chatId)
+          self.allChatDocs.push({id: chatId, chatAvatar: doc.data().chatAvatar, createdOn: doc.data().createdOn, users: doc.data().users})
         })
       }
     })
@@ -237,7 +240,6 @@ export default {
       userList.get().then(function (doc) {
         if (doc.exists) {
           self.usersInChat = doc.data().users
-          console.log('Document data:', doc.data().users)
         } else {
           // doc.data() will be undefined in this case
           console.log('No such document!')
