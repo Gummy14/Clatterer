@@ -138,7 +138,7 @@ export default {
       clipped: true,
       drawer: false,
       isMobile: false,
-      color: 'red darken-3',
+      color: '',
       paintDialog: false,
       activeChat: '',
       createNewChat: false,
@@ -160,8 +160,8 @@ export default {
     // get user chats
     var self = this
     db.collection('userInfo').doc(this.userEmail).onSnapshot(function (doc) {
-      console.log(doc.data().chats)
       self.allChatDocs = doc.data()
+      self.color = doc.data().barColor
     })
   },
   methods: {
@@ -188,6 +188,7 @@ export default {
     setColor ($event) {
       this.color = $event
       this.paintDialog = false
+      db.collection('userInfo').doc(this.userEmail).update({barColor: this.color})
     },
     openChat (chatID) {
       this.createNewChat = false
