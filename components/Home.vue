@@ -23,7 +23,7 @@
 
             <v-subheader>Your Chats</v-subheader>
             <template>
-              <div v-for="(chat, index) in allChatDocs" :key="index">
+              <div v-for="(chat, index) in allChatDocs.chats" :key="index">
                 <v-list-tile :key="chat.id" avatar @click="openChat(chat.id)">
                   <v-list-tile-avatar>
                     <img :src="chat.chatAvatar">
@@ -148,11 +148,6 @@ export default {
       usersInChat: []
     }
   },
-  firestore () {
-    return {
-      allChatDocs: db.collection('chats')
-    }
-  },
   mounted () {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
       this.isMobile = true
@@ -161,6 +156,12 @@ export default {
       Username: firebase.auth().currentUser.displayName,
       Email: firebase.auth().currentUser.email,
       UserPicture: firebase.auth().currentUser.photoURL
+    })
+    // get user chats
+    var self = this
+    db.collection('userInfo').doc(this.userEmail).onSnapshot(function (doc) {
+      console.log(doc.data().chats)
+      self.allChatDocs = doc.data()
     })
   },
   methods: {
@@ -216,8 +217,9 @@ export default {
       })
       db.collection('chats').doc(chatID).collection('messageData').doc('init').set({
         timeStamp: 'Sun Jul 14 1996 00:00:00 GMT-0400 (Eastern Daylight Time)'
+      }).then(() => {
+        this.openChat(chatID)
       })
-      this.openChat(chatID)
     },
     getUsers (chatID) {
       var self = this

@@ -22,8 +22,7 @@ export default {
     return {
       chatName: '',
       imageUrl: '',
-      image: null,
-      userChats: []
+      image: null
     }
   },
   methods: {
@@ -31,8 +30,10 @@ export default {
       var timeStamp = new Date()
       var chatID = this.chatName
       var self = this
+      var avatarUrl = ''
       storage.child('chatAvatars/' + timeStamp.toString()).put(this.image).then(fileData => {
         storage.child('chatAvatars/' + timeStamp.toString()).getDownloadURL().then(function (url) {
+          avatarUrl = url
           db.collection('chats').doc(chatID).set({
             chatAvatar: url,
             users: [self.userEmail],
@@ -40,10 +41,10 @@ export default {
           }).then(() => {
             db.collection('userInfo').doc(self.userEmail).get()
             .then((doc) => {
-              self.userChats = doc.data().chats
-              self.userChats.push(db.collection('chats').doc(chatID))
+              var userChats = doc.data().chats
+              userChats.push({id: chatID, chatAvatar: avatarUrl, createdOn: timeStamp.toString(), users: self.userEmail})
               db.collection('userInfo').doc(self.userEmail).set({
-                chats: self.userChats
+                chats: userChats
               })
             })
           })
