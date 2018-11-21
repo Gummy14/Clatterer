@@ -42,8 +42,8 @@ export default {
             db.collection('userInfo').doc(self.userEmail).get()
             .then((doc) => {
               var userChats = doc.data().chats
-              userChats.push({id: chatID, chatAvatar: avatarUrl, createdOn: timeStamp.toString(), users: self.userEmail})
-              db.collection('userInfo').doc(self.userEmail).set({
+              userChats.push({id: chatID, chatAvatar: avatarUrl, createdOn: timeStamp.toString()})
+              db.collection('userInfo').doc(self.userEmail).update({
                 chats: userChats
               })
             })

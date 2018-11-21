@@ -8,6 +8,7 @@ import ColorSelection from '@/components/ColorSelection'
 import CreateAccount from '@/components/CreateAccount'
 import ChatCreator from '@/components/ChatCreator'
 import EditProfile from '@/components/EditProfile'
+import AddNewUser from '@/components/AddNewUser'
 import Login from '@/components/Login'
 import firebase from 'firebase'
 
@@ -70,6 +71,11 @@ let router = new Router({
       path: '/edit-profile',
       name: 'edit-profile',
       component: EditProfile
+    },
+    {
+      path: '/add-new-user',
+      name: 'add-new-user',
+      component: AddNewUser
     }
   ]
 })

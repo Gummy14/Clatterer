@@ -36,7 +36,7 @@
 </template>
 <script>
 import firebase from 'firebase'
-import { storage } from '../main'
+import { db, storage } from '../main'
 export default {
   name: 'create-account',
   data () {
@@ -62,6 +62,9 @@ export default {
               Username: this.user,
               Email: this.email
             })
+            db.collection('userInfo').doc(email).set({
+              chats: []
+            })
             storage.child('profilePics/' + timeStamp.toString()).put(this.image).then(fileData => {
               storage.child('profilePics/' + timeStamp.toString()).getDownloadURL().then(function (url) {
                 firebase.auth().currentUser.updateProfile({photoURL: url}).then((data) => {
@@ -73,9 +76,9 @@ export default {
             }).then(() => {
               this.image = null
               this.imageUrl = ''
+              alert('Account has been created!')
+              this.$router.push('/home')
             })
-            alert('Account has been created!')
-            this.$router.push('/home')
           })
         })
       } else {

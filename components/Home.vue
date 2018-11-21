@@ -69,6 +69,7 @@
           </v-list-tile-content>
         </v-list-tile>
       </div>
+      <v-btn flat @click="addNewUser = true"><font-awesome-icon icon="user-plus" class="paint-icon"/>Add User</v-btn>
 
       </v-navigation-drawer>
 
@@ -112,6 +113,9 @@
       <v-dialog v-model="editProfile" width="45vh">
         <edit-profile v-on:updatedProfile="editProfile = false"></edit-profile>
       </v-dialog>
+      <v-dialog v-model="addNewUser" width="45vh" height="10vh">
+        <add-new-user v-on:newUserAdded="addNewUser = false"></add-new-user>
+      </v-dialog>
     </div>
 </template>
 <script>
@@ -121,6 +125,7 @@ import MessageTemplate from './MessageTemplate.vue'
 import ColorSelection from './ColorSelection.vue'
 import ChatCreator from './ChatCreator.vue'
 import EditProfile from './EditProfile.vue'
+import AddNewUser from './AddNewUser.vue'
 import { db } from '../main'
 export default {
   name: 'home',
@@ -129,7 +134,8 @@ export default {
     MessageTemplate,
     ColorSelection,
     ChatCreator,
-    EditProfile
+    EditProfile,
+    AddNewUser
   },
   data () {
     return {
@@ -145,7 +151,8 @@ export default {
       isNewChat: false,
       editProfile: false,
       chatOptions: false,
-      usersInChat: []
+      usersInChat: [],
+      addNewUser: false
     }
   },
   mounted () {
@@ -211,11 +218,6 @@ export default {
     },
     openNewChat (chatID) {
       this.isNewChat = true
-      var timeStamp = new Date()
-      db.collection('chats').doc(chatID).set({
-        users: [this.userEmail],
-        createdOn: timeStamp.toString()
-      })
       db.collection('chats').doc(chatID).collection('messageData').doc('init').set({
         timeStamp: 'Sun Jul 14 1996 00:00:00 GMT-0400 (Eastern Daylight Time)'
       }).then(() => {
@@ -224,16 +226,8 @@ export default {
     },
     getUsers (chatID) {
       var self = this
-      var userList = db.collection('chats').doc(chatID)
-      userList.get().then(function (doc) {
-        if (doc.exists) {
-          self.usersInChat = doc.data().users
-        } else {
-          // doc.data() will be undefined in this case
-          console.log('No such document!')
-        }
-      }).catch(function (error) {
-        console.log('Error getting document:', error)
+      db.collection('chats').doc(chatID).onSnapshot(function (doc) {
+        self.usersInChat = doc.data().users
       })
     }
   },
@@ -276,7 +270,7 @@ export default {
   margin: 5%;
 }
 .paint-icon {
-  margin: 2%;
+  margin: 2.5%;
 }
 .username {
   margin: -.5%;
