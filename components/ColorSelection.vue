@@ -20,6 +20,7 @@
     <v-btn color="brown darken-3" v-on:click="selectColor('brown darken-3')">Brown</v-btn>
     <v-btn color="blue-grey darken-3" v-on:click="selectColor('blue-grey darken-3')">Blue Gray</v-btn>
     <v-btn color="grey darken-3" v-on:click="selectColor('grey darken-3')">Gray</v-btn>
+    <v-btn color="" v-on:click="selectColor('')">Black</v-btn>
   </v-card>
 </template>
 <script>

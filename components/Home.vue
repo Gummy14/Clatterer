@@ -107,13 +107,13 @@
       <v-dialog v-model="paintDialog" max-width="290">
         <color-selection v-on:colorPicked="setColor($event)"></color-selection>
       </v-dialog>
-      <v-dialog v-model="createNewChat" width="45vh">
-        <chat-creator v-on:newChat="openNewChat($event)"></chat-creator>
+      <v-dialog v-model="createNewChat" width="450px">
+        <chat-creator chatName="" imageUrl="" image="" v-on:newChat="openNewChat($event)"></chat-creator>
       </v-dialog>
-      <v-dialog v-model="editProfile" width="45vh">
+      <v-dialog v-model="editProfile" width="450px">
         <edit-profile v-on:updatedProfile="editProfile = false"></edit-profile>
       </v-dialog>
-      <v-dialog v-model="addNewUser" width="45vh" height="10vh">
+      <v-dialog v-model="addNewUser" width="450px" height="10vh">
         <add-new-user v-on:newUserAdded="addNewUser = false"></add-new-user>
       </v-dialog>
     </div>

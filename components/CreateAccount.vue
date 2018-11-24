@@ -10,9 +10,9 @@
           <v-text-field v-model="user" placeholder=" " label="Enter A Username"></v-text-field>
           <v-text-field v-model="pass" placeholder=" " label="Enter A Password" type="password"></v-text-field>
           <v-text-field v-model="passConfirm" placeholder=" " label="Confirm Your Password" type="password"></v-text-field>
-          <v-btn @click="createAccountInfo(email, pass, passConfirm)">Confirm</v-btn>
+          <v-btn :disabled="loading" @click="createAccountInfo(email, pass, passConfirm)"><v-progress-circular indeterminate v-if="loading"></v-progress-circular>Confirm</v-btn>
           <input id="fileUploader" accept="image/*" type="file" ref="fileInput" @change="getFile">
-          <v-btn v-on:click="openFileDialogue()">Select A Profile Picture</v-btn>
+          <v-btn :disabled="loading" v-on:click="openFileDialogue()">Select A Profile Picture</v-btn>
           <v-alert :value ="arePasswordsDifferent" type="error" transition="scale-transition">Passwords do not match</v-alert>
         </v-card>
       </div>
@@ -26,9 +26,9 @@
           <v-text-field v-model="user" placeholder=" " label="Enter A Username"></v-text-field>
           <v-text-field v-model="pass" placeholder=" " label="Enter A Password" type="password"></v-text-field>
           <v-text-field v-model="passConfirm" placeholder=" " label="Confirm Your Password" type="password"></v-text-field>
-          <v-btn @click="createAccountInfo(email, pass, passConfirm)">Confirm</v-btn>
+          <v-btn :disabled="loading" @click="createAccountInfo(email, pass, passConfirm)"><v-progress-circular indeterminate v-if="loading"></v-progress-circular>Confirm</v-btn>
           <input id="fileUploader" accept="image/*" type="file" ref="fileInput" @change="getFile">
-          <v-btn v-on:click="openFileDialogue()">Select A Profile Picture</v-btn>
+          <v-btn :disabled="loading" v-on:click="openFileDialogue()">Select A Profile Picture</v-btn>
           <v-alert :value ="arePasswordsDifferent" type="error" transition="scale-transition">Passwords do not match</v-alert>
         </v-card>
       </div>
@@ -48,12 +48,14 @@ export default {
       passConfirm: null,
       arePasswordsDifferent: false,
       imageUrl: '',
-      image: null
+      image: null,
+      loading: false
     }
   },
   methods: {
     createAccountInfo (email, pass, passConfirm) {
       if (pass === passConfirm) {
+        this.loading = true
         var timeStamp = new Date()
         var self = this
         firebase.auth().createUserWithEmailAndPassword(email, pass).then(() => {
@@ -76,7 +78,7 @@ export default {
             }).then(() => {
               this.image = null
               this.imageUrl = ''
-              alert('Account has been created!')
+              this.loading = false
               this.$router.push('/home')
             })
           })

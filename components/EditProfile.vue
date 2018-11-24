@@ -8,8 +8,8 @@
         <v-text-field class="chat-name" label="Username" placeholder=" " v-model="userName" @keypress.native.enter="createNewRoom"></v-text-field>
     </v-list-tile>
       <input id="fileUploader" accept="image/*" type="file" ref="fileInput" @change="getFile">
-      <v-btn class="select-avatar" v-on:click="openFileDialogue()">Choose an Avatar</v-btn>
-      <v-btn class="create-new-chat" @click="saveChanges">Save Changes</v-btn>
+      <v-btn :disabled="loading" class="select-avatar" v-on:click="openFileDialogue()">Choose an Avatar</v-btn>
+      <v-btn :disabled="loading" class="create-new-chat" @click="saveChanges"><v-progress-circular indeterminate v-if="loading"></v-progress-circular>Save Changes</v-btn>
   </v-card>
 </template>
 <script>
@@ -22,11 +22,13 @@ export default {
       chatName: '',
       imageUrl: '',
       image: null,
-      userName: ''
+      userName: '',
+      loading: false
     }
   },
   methods: {
     saveChanges () {
+      this.loading = true
       var timeStamp = new Date()
       var self = this
       firebase.auth().currentUser.updateProfile({displayName: this.userName}).then(() => {
@@ -44,9 +46,10 @@ export default {
         }).then(() => {
           this.image = null
           this.imageUrl = ''
+          this.userName = ''
+          this.loading = true
+          this.$emit('updatedProfile')
         })
-        this.userName = ''
-        this.$emit('updatedProfile')
       })
     },
     openFileDialogue () {

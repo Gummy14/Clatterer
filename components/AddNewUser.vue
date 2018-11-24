@@ -3,7 +3,7 @@
     <v-card-title class="headline">Add a User to this Chat</v-card-title>
     <v-list>
     <v-list-tile class="new-chat">
-      <v-select combobox :items="userEmails" @change="selection = $event" @keypress.native.enter="addUser"></v-select>
+      <v-combobox :items="userEmails" @change="selection = $event" @keypress.native.enter="addUser"></v-combobox>
       <v-btn @click="addUser">Add</v-btn>
     </v-list-tile>
     </v-list>

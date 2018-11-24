@@ -10,7 +10,7 @@
     <input id="fileUploader" accept="image/*" type="file" ref="fileInput" @change="getFile">
     <span>
       <v-btn class="select-avatar" v-on:click="openFileDialogue()">Select a Chat Avatar</v-btn>
-      <v-btn class="create-new-chat" @click="createNewRoom">Create New Chatroom</v-btn>
+      <v-btn class="create-new-chat" @click="createNewRoom" :disabled="loading"><v-progress-circular indeterminate v-if="loading"></v-progress-circular>Create New Chatroom</v-btn>
     </span>
   </v-card>
 </template>
@@ -20,17 +20,21 @@ export default {
   name: 'chat-creator',
   data () {
     return {
-      chatName: '',
-      imageUrl: '',
-      image: null
+      loading: false
     }
   },
+  props: [
+    'chatName',
+    'imageUrl',
+    'image'
+  ],
   methods: {
     createNewRoom () {
       var timeStamp = new Date()
       var chatID = this.chatName
       var self = this
       var avatarUrl = ''
+      this.loading = true
       storage.child('chatAvatars/' + timeStamp.toString()).put(this.image).then(fileData => {
         storage.child('chatAvatars/' + timeStamp.toString()).getDownloadURL().then(function (url) {
           avatarUrl = url
@@ -50,10 +54,7 @@ export default {
           })
         })
       }).then(() => {
-        this.image = null
-        this.imageUrl = ''
-        var chatID = this.chatName
-        this.chatName = ''
+        this.loading = false
         this.$emit('newChat', chatID)
       })
     },
