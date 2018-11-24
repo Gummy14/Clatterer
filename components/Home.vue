@@ -111,7 +111,7 @@
         <chat-creator chatName="" imageUrl="" image="" v-on:newChat="openNewChat($event)"></chat-creator>
       </v-dialog>
       <v-dialog v-model="editProfile" width="450px">
-        <edit-profile v-on:updatedProfile="editProfile = false"></edit-profile>
+        <edit-profile :userName="this.user" :imageUrl="this.userProfilePicture" v-on:updatedProfile="editProfile = false"></edit-profile>
       </v-dialog>
       <v-dialog v-model="addNewUser" width="450px" height="10vh">
         <add-new-user v-on:newUserAdded="addNewUser = false"></add-new-user>

@@ -19,38 +19,49 @@ export default {
   name: 'edit-profile',
   data () {
     return {
-      chatName: '',
-      imageUrl: '',
       image: null,
-      userName: '',
+      imageChanged: false,
       loading: false
     }
   },
+  props: [
+    'userName',
+    'imageUrl'
+  ],
   methods: {
     saveChanges () {
-      this.loading = true
-      var timeStamp = new Date()
-      var self = this
-      firebase.auth().currentUser.updateProfile({displayName: this.userName}).then(() => {
-        storage.child('profilePics/' + timeStamp.toString()).put(this.image).then(fileData => {
-          storage.child('profilePics/' + timeStamp.toString()).getDownloadURL().then(function (url) {
-            firebase.auth().currentUser.updateProfile({photoURL: url}).then((data) => {
-              self.$store.commit('setUserPicture', {
-                UserPicture: url
+      if (this.userName !== '' && this.imageUrl !== '') {
+        this.loading = true
+        var timeStamp = new Date()
+        var self = this
+        firebase.auth().currentUser.updateProfile({displayName: this.userName}).then(() => {
+          if (self.imageChanged) {
+            console.log('upload')
+            storage.child('profilePics/' + timeStamp.toString()).put(this.image).then(fileData => {
+              storage.child('profilePics/' + timeStamp.toString()).getDownloadURL().then(function (url) {
+                firebase.auth().currentUser.updateProfile({photoURL: url}).then((data) => {
+                  self.$store.commit('setUserPicture', {
+                    UserPicture: url
+                  })
+                  self.$store.commit('setUserName', {
+                    Username: self.userName
+                  })
+                })
               })
-              self.$store.commit('setUserName', {
-                Username: self.userName
-              })
+            }).then(() => {
+              this.image = null
+              this.loading = false
+              this.$emit('updatedProfile')
             })
-          })
-        }).then(() => {
-          this.image = null
-          this.imageUrl = ''
-          this.userName = ''
-          this.loading = true
-          this.$emit('updatedProfile')
+          } else {
+            self.$store.commit('setUserName', {
+              Username: self.userName
+            })
+            this.loading = false
+            this.$emit('updatedProfile')
+          }
         })
-      })
+      }
     },
     openFileDialogue () {
       this.$refs.fileInput.click()
@@ -64,6 +75,7 @@ export default {
       fileReader.readAsDataURL(file[0])
       this.image = file[0]
       this.imageSelected = true
+      this.imageChanged = true
     }
   }
 }
