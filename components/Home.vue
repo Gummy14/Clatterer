@@ -6,7 +6,7 @@
       enable-resize-watcher
       fixed
       app
-    >
+      >
       <v-list class="pt-0">
         <v-list-tile @click="editProfile = true">
           <v-list-tile-avatar class="profile-pic">
@@ -107,14 +107,14 @@
       <v-dialog v-model="paintDialog" max-width="290">
         <color-selection v-on:colorPicked="setColor($event)"></color-selection>
       </v-dialog>
-      <v-dialog v-model="createNewChat" width="450px">
-        <chat-creator chatName="" imageUrl="" image="" v-on:newChat="openNewChat($event)"></chat-creator>
+      <v-dialog v-model="createNewChat" width="475px">
+        <chat-creator v-on:newChat="openNewChat($event)"></chat-creator>
       </v-dialog>
       <v-dialog v-model="editProfile" width="450px">
         <edit-profile :userName="this.user" :imageUrl="this.userProfilePicture" v-on:updatedProfile="editProfile = false"></edit-profile>
       </v-dialog>
       <v-dialog v-model="addNewUser" width="450px" height="10vh">
-        <add-new-user selection="" v-on:newUserAdded="addNewUser = false"></add-new-user>
+        <add-new-user v-on:newUserAdded="addNewUser = false"></add-new-user>
       </v-dialog>
     </div>
 </template>
@@ -249,6 +249,20 @@ export default {
       } else {
         this.$store.commit('setIsCreateChatOpen', {
           IsCreateChatOpen: false
+        })
+      }
+    },
+    addNewUser(val) {
+      this.$store.commit('setUserToAddToChat', {
+        UserToAddToChat: ''
+      })
+      if (val) {
+        this.$store.commit('setIsAddNewUserOpen', {
+          IsAddNewUserOpen: true
+        })
+      } else {
+        this.$store.commit('setIsAddNewUserOpen', {
+          IsAddNewUserOpen: false
         })
       }
     }

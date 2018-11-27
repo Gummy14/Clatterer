@@ -3,31 +3,31 @@
     <v-card-title class="headline">Add a User to this Chat</v-card-title>
     <v-list>
     <v-list-tile class="new-chat">
-      <v-combobox @keypress.native.enter="addUser" :items="userEmails" @change="selection = $event"></v-combobox>
-      <v-btn @click="addUser" :disabled="loading"><v-progress-circular indeterminate v-if="loading"></v-progress-circular>Add</v-btn>
+      <v-combobox @keypress.native.enter="addUser" v-model="userSelection" :items="userEmails" @change="setSelection($event)"></v-combobox>
+      <v-btn @click="addUser" :disabled="loading || this.$store.getters.currentUserToAddToChat === ''"><v-progress-circular indeterminate v-if="loading"></v-progress-circular>Add</v-btn>
     </v-list-tile>
     </v-list>
   </v-card>
 </template>
 <script>
 import { db } from '../main'
+import { mapState } from 'vuex'
 export default {
   name: 'add-new-user',
   data () {
     return {
       allUsers: [],
-      loading: false
+      loading: false,
+      userSelection: null
     }
   },
-  props: [
-    'selection'
-  ],
   firestore () {
     return {
       allUsers: db.collection('userInfo')
     }
   },
   computed: {
+    ...mapState({isAddNewUserOpen: 'isAddNewUserOpen'}),
     userEmails () {
       var userList = []
       for (var i = 0; i < this.allUsers.length; i++) {
@@ -36,12 +36,22 @@ export default {
       return userList
     }
   },
+  watch: {
+    isAddNewUserOpen (val) {
+      this.userSelection = null
+    }
+  },
   methods: {
+    setSelection (selection) {
+      this.$store.commit('setUserToAddToChat', {
+        UserToAddToChat: selection
+      })
+    },
     addUser () {
-      if (this.selection != null) {
+      if (this.$store.getters.currentUserToAddToChat !== '') {
         this.loading = true
         var self = this
-        var userSelection = this.selection
+        var userSelection = this.$store.getters.currentUserToAddToChat
         var docChatAvatar
         var docCreatedOn
         var docUsers

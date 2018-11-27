@@ -5,7 +5,7 @@
         <v-card raised hover class="login">
           <v-text-field v-model="email" placeholder=" " label="Email"></v-text-field>
           <v-text-field @keypress.native.enter="logIn" v-model="pass" placeholder=" " label="Password" type="password"></v-text-field>
-          <v-btn @click="logIn">Log In</v-btn>
+          <v-btn @click="logIn" :disabled="loading"><v-progress-circular indeterminate v-if="loading"></v-progress-circular>Log In</v-btn>
           <v-btn @click="createAccount" class="createAccount">Create An Account</v-btn>
           <v-alert :value ="didLogIn" :type="LogInResult" transition="scale-transition">{{ LogInMessage }}</v-alert>
         </v-card>
@@ -15,7 +15,7 @@
         <v-card raised hover class="login">
           <v-text-field v-model="email" placeholder=" " label="Email"></v-text-field>
           <v-text-field @keypress.native.enter="logIn" v-model="pass" placeholder=" " label="Password" type="password"></v-text-field>
-          <v-btn @click="logIn">Log In</v-btn>
+          <v-btn @click="logIn" :disabled="loading"><v-progress-circular indeterminate v-if="loading"></v-progress-circular>Log In</v-btn>
           <v-btn @click="createAccount" class="createAccount">Create An Account</v-btn>
           <v-alert :value ="didLogIn" :type="LogInResult" transition="scale-transition">{{ LogInMessage }}</v-alert>
         </v-card>
@@ -27,17 +27,30 @@ import firebase from 'firebase'
 import CreateAccount from './CreateAccount.vue'
 export default {
   name: 'login',
+  data () {
+    return {
+      loading: false,
+      isMobile: false,
+      email: null,
+      pass: null,
+      didLogIn: false,
+      LogInResult: null,
+      LogInMessage: null
+    }
+  },
   components: {
     CreateAccount
   },
   methods: {
     logIn () {
       if (this.email !== null && this.pass !== null) {
+        this.loading = true
         firebase.auth().signInWithEmailAndPassword(this.email, this.pass)
         .then(() => {
           this.didLogIn = true
           this.LogInResult = 'success'
           this.LogInMessage = 'Log In Successful!'
+          this.loading = false
           this.$router.push('/home')
         })
         .catch(() => {
@@ -53,16 +66,6 @@ export default {
     },
     createAccount () {
       this.$router.push('/createAccount')
-    }
-  },
-  data () {
-    return {
-      isMobile: false,
-      email: null,
-      pass: null,
-      didLogIn: false,
-      LogInResult: null,
-      LogInMessage: null
     }
   },
   mounted () {

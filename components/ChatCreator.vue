@@ -27,14 +27,12 @@ export default {
       loading: false,
       rules: {
         required: val => !!val || 'Required'
-      }
+      },
+      chatName: '',
+      imageUrl: '',
+      image: ''
     }
   },
-  props: [
-    'chatName',
-    'imageUrl',
-    'image'
-  ],
   methods: {
     createNewRoom () {
       if (this.$refs.form.validate() && this.imageUrl !== '') {
