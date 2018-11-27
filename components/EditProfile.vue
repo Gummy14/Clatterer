@@ -5,7 +5,7 @@
       <v-list-tile-avatar v-if="imageUrl" class="avatar-prev">
         <img :src="imageUrl">
       </v-list-tile-avatar>
-        <v-text-field class="chat-name" label="Username" placeholder=" " v-model="userName" @keypress.native.enter="createNewRoom"></v-text-field>
+        <v-text-field class="chat-name" label="Username" placeholder=" " v-model="userName" @keypress.native.enter="saveChanges"></v-text-field>
     </v-list-tile>
       <input id="fileUploader" accept="image/*" type="file" ref="fileInput" @change="getFile">
       <v-btn :disabled="loading" class="select-avatar" v-on:click="openFileDialogue()">Choose an Avatar</v-btn>
@@ -36,7 +36,6 @@ export default {
         var self = this
         firebase.auth().currentUser.updateProfile({displayName: this.userName}).then(() => {
           if (self.imageChanged) {
-            console.log('upload')
             storage.child('profilePics/' + timeStamp.toString()).put(this.image).then(fileData => {
               storage.child('profilePics/' + timeStamp.toString()).getDownloadURL().then(function (url) {
                 firebase.auth().currentUser.updateProfile({photoURL: url}).then((data) => {

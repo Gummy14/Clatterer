@@ -8,7 +8,10 @@ export const store = new Vuex.Store({
     user: '',
     email: '',
     activeChat: '',
-    profilePicture: ''
+    profilePicture: '',
+    isCreateChatOpen: false,
+    noCreateChatProfilePicture: false,
+    noCreateChatName: false
   },
   mutations: {
     setUser (state, payload) {
@@ -34,6 +37,15 @@ export const store = new Vuex.Store({
       state.user = payload.Username
       state.email = payload.Email
       state.profilePicture = payload.UserPicture
+    },
+    setNoCreateChatProfilePicture (state, payload) {
+      state.noCreateChatProfilePicture = payload.NoChatAvatar
+    },
+    setNoCreateChatName (state, payload) {
+      state.noCreateChatName = payload.NoChatName
+    },
+    setIsCreateChatOpen (state, payload) {
+      state.isCreateChatOpen = payload.IsCreateChatOpen
     }
   },
   actions: {},
@@ -49,6 +61,15 @@ export const store = new Vuex.Store({
     },
     currentProfilePicture (state) {
       return state.profilePicture
+    },
+    currentNoCreateChatProfilePicture (state) {
+      return state.noCreateChatProfilePicture
+    },
+    currentNoCreateChatName (state) {
+      return state.noCreateChatName
+    },
+    currentIsCreateChatOpen (state) {
+      return state.isCreateChatOpen
     }
   }
 })

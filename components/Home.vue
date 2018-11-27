@@ -34,7 +34,7 @@
                   </v-list-tile-content>
                 </v-list-tile>
               </div>
-              <v-btn flat @click="createNewChat = true"><font-awesome-icon icon="comments" class="paint-icon"/>Create New Chat</v-btn>
+              <v-btn flat @click="openCreateChat()"><font-awesome-icon icon="comments" class="paint-icon"/>Create New Chat</v-btn>
             </template>
  
           </v-list>
@@ -114,7 +114,7 @@
         <edit-profile :userName="this.user" :imageUrl="this.userProfilePicture" v-on:updatedProfile="editProfile = false"></edit-profile>
       </v-dialog>
       <v-dialog v-model="addNewUser" width="450px" height="10vh">
-        <add-new-user v-on:newUserAdded="addNewUser = false"></add-new-user>
+        <add-new-user selection="" v-on:newUserAdded="addNewUser = false"></add-new-user>
       </v-dialog>
     </div>
 </template>
@@ -229,6 +229,28 @@ export default {
       db.collection('chats').doc(chatID).onSnapshot(function (doc) {
         self.usersInChat = doc.data().users
       })
+    },
+    openCreateChat () {
+      this.createNewChat = true
+    }
+  },
+  watch: {
+    createNewChat (val) {
+      this.$store.commit('setNoCreateChatProfilePicture', {
+        NoChatAvatar: false
+      })
+      this.$store.commit('setNoCreateChatName', {
+        NoChatName: false
+      })
+      if (val) {
+        this.$store.commit('setIsCreateChatOpen', {
+          IsCreateChatOpen: true
+        })
+      } else {
+        this.$store.commit('setIsCreateChatOpen', {
+          IsCreateChatOpen: false
+        })
+      }
     }
   },
   computed: {

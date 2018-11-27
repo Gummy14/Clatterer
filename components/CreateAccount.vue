@@ -3,32 +3,38 @@
       <div v-if="!isMobile" class="page">
         <h1 class="title">C L A T T E R E R</h1>
         <v-card raised hover class="login">
-          <v-list-tile-avatar v-if="imageUrl" class="profile-pic">
-            <img :src="imageUrl">
-          </v-list-tile-avatar>
-          <v-text-field v-model="email" placeholder=" " label="Enter An Email"></v-text-field>
-          <v-text-field v-model="user" placeholder=" " label="Enter A Username"></v-text-field>
-          <v-text-field v-model="pass" placeholder=" " label="Enter A Password" type="password"></v-text-field>
-          <v-text-field v-model="passConfirm" placeholder=" " label="Confirm Your Password" type="password"></v-text-field>
+          <v-form ref="form" lazy-validation>
+            <v-list-tile-avatar v-if="imageUrl" class="profile-pic">
+              <img :src="imageUrl">
+            </v-list-tile-avatar>
+            <v-text-field :rules="[rules.required]" required v-model="email" placeholder=" " label="Enter An Email"></v-text-field>
+            <v-text-field :rules="[rules.required]" required v-model="user" placeholder=" " label="Enter A Username"></v-text-field>
+            <v-text-field :rules="[rules.required]" required v-model="pass" placeholder=" " label="Enter A Password" type="password"></v-text-field>
+            <v-text-field :rules="[rules.required]" required v-model="passConfirm" placeholder=" " label="Confirm Your Password" type="password"></v-text-field>
+          </v-form>
           <v-btn :disabled="loading" @click="createAccountInfo(email, pass, passConfirm)"><v-progress-circular indeterminate v-if="loading"></v-progress-circular>Confirm</v-btn>
           <input id="fileUploader" accept="image/*" type="file" ref="fileInput" @change="getFile">
           <v-btn :disabled="loading" v-on:click="openFileDialogue()">Select A Profile Picture</v-btn>
+          <v-alert :value ="noProfilePicture" type="error" transition="scale-transition">No Profile Picture Selected</v-alert>
           <v-alert :value ="arePasswordsDifferent" type="error" transition="scale-transition">Passwords do not match</v-alert>
         </v-card>
       </div>
       <div v-else class="page-mobile">
         <h1 class="title">C L A T T E R E R</h1>
         <v-card raised hover class="login">
-          <v-list-tile-avatar v-if="imageUrl" class="profile-pic">
-            <img :src="imageUrl">
-          </v-list-tile-avatar>
-          <v-text-field v-model="email" placeholder=" " label="Enter An Email"></v-text-field>
-          <v-text-field v-model="user" placeholder=" " label="Enter A Username"></v-text-field>
-          <v-text-field v-model="pass" placeholder=" " label="Enter A Password" type="password"></v-text-field>
-          <v-text-field v-model="passConfirm" placeholder=" " label="Confirm Your Password" type="password"></v-text-field>
+          <v-form ref="form" lazy-validation>
+            <v-list-tile-avatar v-if="imageUrl" class="profile-pic">
+              <img :src="imageUrl">
+            </v-list-tile-avatar>
+            <v-text-field :rules="[rules.required]" required v-model="email" placeholder=" " label="Enter An Email"></v-text-field>
+            <v-text-field :rules="[rules.required]" required v-model="user" placeholder=" " label="Enter A Username"></v-text-field>
+            <v-text-field :rules="[rules.required]" required v-model="pass" placeholder=" " label="Enter A Password" type="password"></v-text-field>
+            <v-text-field :rules="[rules.required]" required v-model="passConfirm" placeholder=" " label="Confirm Your Password" type="password"></v-text-field>
+          </v-form>
           <v-btn :disabled="loading" @click="createAccountInfo(email, pass, passConfirm)"><v-progress-circular indeterminate v-if="loading"></v-progress-circular>Confirm</v-btn>
           <input id="fileUploader" accept="image/*" type="file" ref="fileInput" @change="getFile">
           <v-btn :disabled="loading" v-on:click="openFileDialogue()">Select A Profile Picture</v-btn>
+          <v-alert :value ="noProfilePicture" type="error" transition="scale-transition">No Profile Picture Selected</v-alert>
           <v-alert :value ="arePasswordsDifferent" type="error" transition="scale-transition">Passwords do not match</v-alert>
         </v-card>
       </div>
@@ -47,14 +53,20 @@ export default {
       pass: null,
       passConfirm: null,
       arePasswordsDifferent: false,
+      noProfilePicture: false,
       imageUrl: '',
       image: null,
-      loading: false
+      loading: false,
+      rules: {
+        required: value => !!value || 'Required'
+      }
     }
   },
   methods: {
     createAccountInfo (email, pass, passConfirm) {
-      if (pass === passConfirm) {
+      this.arePasswordsDifferent = false
+      this.noProfilePicture = false
+      if (this.$refs.form.validate() && this.pass === this.passConfirm && this.imageUrl !== null) {
         this.loading = true
         var timeStamp = new Date()
         var self = this
@@ -84,7 +96,12 @@ export default {
           })
         })
       } else {
-        this.arePasswordsDifferent = true
+        if (this.pass !== this.passConfirm) {
+          this.arePasswordsDifferent = true
+        }
+        if (this.imageUrl === '') {
+          this.noProfilePicture = true
+        }
       }
     },
     openFileDialogue () {

@@ -3,8 +3,8 @@
     <v-card-title class="headline">Add a User to this Chat</v-card-title>
     <v-list>
     <v-list-tile class="new-chat">
-      <v-combobox :items="userEmails" @change="selection = $event" @keypress.native.enter="addUser"></v-combobox>
-      <v-btn @click="addUser">Add</v-btn>
+      <v-combobox @keypress.native.enter="addUser" :items="userEmails" @change="selection = $event"></v-combobox>
+      <v-btn @click="addUser" :disabled="loading"><v-progress-circular indeterminate v-if="loading"></v-progress-circular>Add</v-btn>
     </v-list-tile>
     </v-list>
   </v-card>
@@ -16,9 +16,12 @@ export default {
   data () {
     return {
       allUsers: [],
-      selection: ''
+      loading: false
     }
   },
+  props: [
+    'selection'
+  ],
   firestore () {
     return {
       allUsers: db.collection('userInfo')
@@ -36,6 +39,7 @@ export default {
   methods: {
     addUser () {
       if (this.selection != null) {
+        this.loading = true
         var self = this
         var userSelection = this.selection
         var docChatAvatar
@@ -57,6 +61,7 @@ export default {
               db.collection('userInfo').doc(userSelection).update({
                 chats: userChats
               }).then(() => {
+                this.loading = false
                 this.$emit('newUserAdded')
               })
             })

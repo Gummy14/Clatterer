@@ -5,6 +5,7 @@
           <v-btn flat class="react-button" v-on:click="closeDialogueBox(reactIcons)"><img class="react-icon" :src="reactIcons"></v-btn>
         </div>
       </div>
+       <v-progress-circular indeterminate v-if="loading"></v-progress-circular>
       <v-spacer></v-spacer>
       <input id="fileUploader" accept="image/*" type="file" ref="fileInput" @change="getFile">
       <v-btn v-on:click="openFileDialogue()">Add React</v-btn>
@@ -34,6 +35,7 @@ export default {
       this.addReact()
     },
     addReact () {
+      this.loading = true
       var timeStamp = new Date()
       var reactDoc = this.reactDocInFirebaseStorage
       var updateReactDoc = this.updatedReacts
@@ -49,6 +51,7 @@ export default {
       }).then(() => {
         this.addedReact = null
         this.addedReactUrl = ''
+        this.loading = false
       })
     }
   },
@@ -57,7 +60,8 @@ export default {
       reactDocInFirebaseStorage: [],
       updatedReacts: [],
       addedReactUrl: '',
-      addedReact: null
+      addedReact: null,
+      loading: false
     }
   },
   props: [

@@ -67,7 +67,8 @@ export default {
   max-width: 100%;
 }
 .image-style {
-  max-width: 50%;
+  max-width: 80%;
+  max-height: 33vh;
   padding-left: .1%;
   padding-bottom: 1%;
   display: flex;
