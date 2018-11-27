@@ -252,7 +252,7 @@ export default {
         })
       }
     },
-    addNewUser(val) {
+    addNewUser (val) {
       this.$store.commit('setUserToAddToChat', {
         UserToAddToChat: ''
       })

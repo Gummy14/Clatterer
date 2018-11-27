@@ -54,7 +54,7 @@ export const store = new Vuex.Store({
     },
     setIsAddNewUserOpen (state, payload) {
       state.isAddNewUserOpen = payload.IsAddNewUserOpen
-    },
+    }
   },
   actions: {},
   getters: {
