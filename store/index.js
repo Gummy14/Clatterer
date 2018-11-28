@@ -13,7 +13,8 @@ export const store = new Vuex.Store({
     noCreateChatProfilePicture: false,
     noCreateChatName: false,
     userToAddToChat: '',
-    isAddNewUserOpen: false
+    isAddNewUserOpen: false,
+    isEditProfileOpen: false
   },
   mutations: {
     setUser (state, payload) {
@@ -54,6 +55,9 @@ export const store = new Vuex.Store({
     },
     setIsAddNewUserOpen (state, payload) {
       state.isAddNewUserOpen = payload.IsAddNewUserOpen
+    },
+    setIsEditProfileOpen (state, payload) {
+      state.isEditProfileOpen = payload.IsEditProfileOpen
     }
   },
   actions: {},
@@ -84,6 +88,9 @@ export const store = new Vuex.Store({
     },
     currentIsAddNewUserOpen (state) {
       return state.isAddNewUserOpen
+    },
+    currentIsEditProfileOpen (state) {
+      return state.isEditProfileOpen
     }
   }
 })

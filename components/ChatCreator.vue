@@ -14,7 +14,7 @@
       <v-btn class="select-avatar" v-on:click="openFileDialogue()">Select a Chat Avatar</v-btn>
       <v-btn class="create-new-chat" @click="createNewRoom" :disabled="loading"><v-progress-circular indeterminate v-if="loading"></v-progress-circular>Create New Chatroom</v-btn>
     </span>
-    <v-alert class="alert" :value ="noChatAvatar" type="error" transition="scale-transition">No Chat Avatar Selected</v-alert>
+    <v-alert class="alert" :value ="$store.getters.currentNoCreateChatProfilePicture" type="error" transition="scale-transition">No Chat Avatar Selected</v-alert>
   </v-card>
 </template>
 <script>
@@ -88,16 +88,15 @@ export default {
       fileReader.readAsDataURL(file[0])
       this.image = file[0]
       this.imageSelected = true
-      this.noChatAvatar = false
+      this.$store.commit('setNoCreateChatProfilePicture', {
+        NoChatAvatar: false
+      })
     }
   },
   computed: {
-    ...mapState({isCreateChatOpen: 'isCreateChatOpen'}),
+    ...mapState({isCreateChatOpen: 'isCreateChatOpen'}, {noCreateChatProfilePicture: 'noCreateChatProfilePicture'}),
     userEmail () {
       return this.$store.getters.currentEmail
-    },
-    noChatAvatar () {
-      return this.$store.getters.currentNoCreateChatProfilePicture
     },
     noChatName () {
       return this.$store.getters.currentNoCreateChatName

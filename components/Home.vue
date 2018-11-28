@@ -1,6 +1,7 @@
 <template>
-    <div class="page">
-      <v-navigation-drawer
+  <div class="page">
+    <!-- Left Drawer -->
+    <v-navigation-drawer
       :clipped="clipped"
       v-model="drawer"
       enable-resize-watcher
@@ -19,37 +20,46 @@
           </v-list-tile-content>
         </v-list-tile>
         <v-divider></v-divider>
-          <v-list two-line>
-
-            <v-subheader>Your Chats</v-subheader>
-            <template>
-              <div v-for="(chat, index) in allChatDocs.chats" :key="index">
-                <v-list-tile :key="chat.id" avatar @click="openChat(chat.id)">
-                  <v-list-tile-avatar>
-                    <img :src="chat.chatAvatar">
-                  </v-list-tile-avatar>
-                  <v-list-tile-content>
-                    <v-list-tile-title v-html="chat.id"></v-list-tile-title>
-                    <v-list-tile-sub-title v-html="chat.subtitle"></v-list-tile-sub-title>
-                  </v-list-tile-content>
-                </v-list-tile>
-              </div>
-              <v-btn flat @click="openCreateChat()"><font-awesome-icon icon="comments" class="paint-icon"/>Create New Chat</v-btn>
-            </template>
- 
-          </v-list>
+        <v-list two-line>
+          <v-subheader>Your Chats</v-subheader>
+          <template>
+            <div v-for="(chat, index) in allChatDocs.chats" :key="index">
+              <v-list-tile :key="chat.id" avatar @click="openChat(chat.id)">
+                <v-list-tile-avatar>
+                  <img :src="chat.chatAvatar">
+                </v-list-tile-avatar>
+                <v-list-tile-content>
+                  <v-list-tile-title v-html="chat.id"></v-list-tile-title>
+                  <v-list-tile-sub-title v-html="chat.subtitle"></v-list-tile-sub-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </div>
+            <v-btn flat @click="createNewChat = true">
+              <font-awesome-icon icon="comments" class="paint-icon"/>
+              Create New Chat
+            </v-btn>
+          </template>
+        </v-list>
         <v-divider></v-divider>
-        <v-btn flat @click="paintDialog = true"><font-awesome-icon icon="paint-brush" class="paint-icon"/>Select Toolbar Color</v-btn>
-        <v-btn flat @click="logOut"><font-awesome-icon icon="sign-out-alt" class="logout-icon"/>Log Out</v-btn>
+        <v-btn flat @click="paintDialog = true">
+          <font-awesome-icon icon="paint-brush" class="paint-icon"/>
+          Select Toolbar Color
+        </v-btn>
+        <v-btn flat @click="logOut">
+          <font-awesome-icon icon="sign-out-alt" class="logout-icon"/>
+          Log Out
+        </v-btn>
       </v-list>
     </v-navigation-drawer>
-    <v-navigation-drawer
-        right
-        :clipped="clipped"
-        v-model="chatOptions"
-        enable-resize-watcher
-        fixed
-        app
+
+    <!-- Right Drawer -->
+    <v-navigation-drawer v-if="this.$store.getters.currentActiveChat !== ''"
+      right
+      :clipped="clipped"
+      v-model="chatOptions"
+      enable-resize-watcher
+      fixed
+      app
       >
       <v-list class="pt-0">
         <v-list-tile>
@@ -61,7 +71,6 @@
         </v-list-tile>
         <v-divider></v-divider>
       </v-list>
-
       <div v-for="(user, index) in usersInChat" :key="index">
         <v-list-tile :key="user.id">
           <v-list-tile-content>
@@ -69,25 +78,31 @@
           </v-list-tile-content>
         </v-list-tile>
       </div>
-      <v-btn flat @click="addNewUser = true"><font-awesome-icon icon="user-plus" class="paint-icon"/>Add User</v-btn>
+      <v-btn flat @click="addNewUser = true">
+        <font-awesome-icon icon="user-plus" class="paint-icon"/>
+        Add User
+      </v-btn>
+    </v-navigation-drawer>
 
-      </v-navigation-drawer>
+    <!-- Toolbar -->
+    <v-toolbar class="toolbar" fixed app :clipped-left="clipped" :color="color">
+      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-title>{{ activeChat }}</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn v-if="this.$store.getters.currentActiveChat !== ''" icon @click="chatOptions = !chatOptions">
+        <v-icon>more_vert</v-icon>
+      </v-btn>
+    </v-toolbar>
 
-      <v-toolbar class="toolbar" fixed app :clipped-left="clipped" :color="color">
-        <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-        <v-toolbar-title>{{ activeChat }}</v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-btn icon @click="chatOptions = !chatOptions"><v-icon>more_vert</v-icon></v-btn>
-      </v-toolbar>
- 
-      <div>
-        <div id="container" class="mes-container">
-          <div v-if="!activeChat" class="empty-page">
-            <h1>No Chats Open</h1>
-          </div>
-          <div v-else v-for="(texts, id) in messages" :key="id" class="message-holder">
-            <v-card raised>
-              <message-template v-on:newMessage="scrollToBottom()" 
+    <!-- Chat Content -->
+    <div>
+      <div v-if="!activeChat" class="empty-page">
+        <h1>No Chats Open</h1>
+      </div>
+      <div v-else id="container" class="mes-container">
+        <div v-for="(texts, id) in messages" :key="id" class="message-holder">
+          <v-card raised>
+            <message-template v-on:newMessage="scrollToBottom()" 
               :user="texts.user" 
               :userProfilePicture="texts.userProfilePicture"
               :messageText="texts.messageText" 
@@ -95,28 +110,30 @@
               :reacts="texts.reacts" 
               :timeStamp="texts.timeStamp" 
               :documentID="texts.id"></message-template>
-            </v-card>
-          </div>
-        </div>
-        <div class="message-container">
-          <v-card raised hover class="message-enter">
-            <messenger></messenger>
           </v-card>
         </div>
       </div>
-      <v-dialog v-model="paintDialog" max-width="290">
-        <color-selection v-on:colorPicked="setColor($event)"></color-selection>
-      </v-dialog>
-      <v-dialog v-model="createNewChat" width="475px">
-        <chat-creator v-on:newChat="openNewChat($event)"></chat-creator>
-      </v-dialog>
-      <v-dialog v-model="editProfile" width="450px">
-        <edit-profile :userName="this.user" :imageUrl="this.userProfilePicture" v-on:updatedProfile="editProfile = false"></edit-profile>
-      </v-dialog>
-      <v-dialog v-model="addNewUser" width="450px" height="10vh">
-        <add-new-user v-on:newUserAdded="addNewUser = false"></add-new-user>
-      </v-dialog>
+      <div class="message-container" v-if="this.$store.getters.currentActiveChat !== ''">
+        <v-card raised hover class="message-enter">
+          <messenger></messenger>
+        </v-card>
+      </div>
     </div>
+
+    <!-- Dialog Boxes -->
+    <v-dialog v-model="paintDialog" max-width="290">
+      <color-selection v-on:colorPicked="setColor($event)"></color-selection>
+    </v-dialog>
+    <v-dialog v-model="createNewChat" width="475px">
+      <chat-creator v-on:newChat="openNewChat($event)"></chat-creator>
+    </v-dialog>
+    <v-dialog v-model="editProfile" width="450px">
+      <edit-profile v-on:updatedProfile="editProfile = false"></edit-profile>
+    </v-dialog>
+    <v-dialog v-model="addNewUser" width="450px" height="10vh">
+      <add-new-user v-on:newUserAdded="addNewUser = false"></add-new-user>
+    </v-dialog>
+  </div>
 </template>
 <script>
 import firebase from 'firebase'
@@ -163,6 +180,9 @@ export default {
       Username: firebase.auth().currentUser.displayName,
       Email: firebase.auth().currentUser.email,
       UserPicture: firebase.auth().currentUser.photoURL
+    })
+    this.$store.commit('setActiveChat', {
+      ActiveChat: ''
     })
     // get user chats
     var self = this
@@ -229,9 +249,6 @@ export default {
       db.collection('chats').doc(chatID).onSnapshot(function (doc) {
         self.usersInChat = doc.data().users
       })
-    },
-    openCreateChat () {
-      this.createNewChat = true
     }
   },
   watch: {
@@ -263,6 +280,17 @@ export default {
       } else {
         this.$store.commit('setIsAddNewUserOpen', {
           IsAddNewUserOpen: false
+        })
+      }
+    },
+    editProfile (val) {
+      if (val) {
+        this.$store.commit('setIsEditProfileOpen', {
+          IsEditProfileOpen: true
+        })
+      } else {
+        this.$store.commit('setIsEditProfileOpen', {
+          IsEditProfileOpen: false
         })
       }
     }

@@ -4,8 +4,8 @@
         <div v-for="reactIcons in reactions.customReacts" :key="reactIcons" class="react-holder">
           <v-btn flat class="react-button" v-on:click="closeDialogueBox(reactIcons)"><img class="react-icon" :src="reactIcons"></v-btn>
         </div>
+        <v-progress-circular class="loading-icon" indeterminate v-if="loading"></v-progress-circular>
       </div>
-       <v-progress-circular indeterminate v-if="loading"></v-progress-circular>
       <v-spacer></v-spacer>
       <input id="fileUploader" accept="image/*" type="file" ref="fileInput" @change="getFile">
       <v-btn v-on:click="openFileDialogue()">Add React</v-btn>
@@ -87,5 +87,8 @@ export default {
 .react-holder {
   max-height: 290px;
   overflow: auto;
+}
+.loading-icon {
+  margin-left: 12%;
 }
 </style>

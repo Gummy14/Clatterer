@@ -15,19 +15,18 @@
 <script>
 import firebase from 'firebase'
 import { storage } from '../main'
+import { mapState } from 'vuex'
 export default {
   name: 'edit-profile',
   data () {
     return {
       image: null,
       imageChanged: false,
-      loading: false
+      loading: false,
+      userName: this.$store.getters.currentUsername,
+      imageUrl: this.$store.getters.currentProfilePicture
     }
   },
-  props: [
-    'userName',
-    'imageUrl'
-  ],
   methods: {
     saveChanges () {
       if (this.userName !== '' && this.imageUrl !== '') {
@@ -75,6 +74,15 @@ export default {
       this.image = file[0]
       this.imageSelected = true
       this.imageChanged = true
+    }
+  },
+  computed: {
+    ...mapState({isEditProfileOpen: 'isEditProfileOpen'})
+  },
+  watch: {
+    isEditProfileOpen (val) {
+      this.userName = this.$store.getters.currentUsername
+      this.imageUrl = this.$store.getters.currentProfilePicture
     }
   }
 }
