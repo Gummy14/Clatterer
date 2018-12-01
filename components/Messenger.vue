@@ -19,6 +19,7 @@
 </template>
 <script>
 import { db, storage } from '../main'
+import firebase from 'firebase'
 export default {
   name: 'messenger',
   data () {
@@ -44,7 +45,7 @@ export default {
         var user = this.user
         var userProfilePicture = this.userProfilePicture
         var userEmail = this.userEmail
-        var timeStamp = new Date()
+        var timeStamp = firebase.firestore.FieldValue.serverTimestamp()
         var imageMessage = this.imageUrl
         var activeChat = this.$store.getters.currentActiveChat
         if (this.image != null) {

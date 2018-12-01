@@ -13,6 +13,7 @@
 </template>
 <script>
 import { db, storage } from '../main'
+import firebase from 'firebase'
 export default {
   name: 'react-selection',
   methods: {
@@ -36,7 +37,7 @@ export default {
     },
     addReact () {
       this.loading = true
-      var timeStamp = new Date()
+      var timeStamp = firebase.firestore.FieldValue.serverTimestamp()
       var reactDoc = this.reactDocInFirebaseStorage
       var updateReactDoc = this.updatedReacts
       var activeChat = this.$store.getters.currentActiveChat

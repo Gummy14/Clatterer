@@ -20,6 +20,7 @@
 <script>
 import { db, storage } from '../main'
 import { mapState } from 'vuex'
+import firebase from 'firebase'
 export default {
   name: 'chat-creator',
   data () {
@@ -36,7 +37,7 @@ export default {
   methods: {
     createNewRoom () {
       if (this.$refs.form.validate() && this.imageUrl !== '') {
-        var timeStamp = new Date()
+        var timeStamp = firebase.firestore.FieldValue.serverTimestamp()
         var chatID = this.chatName
         var self = this
         var avatarUrl = ''

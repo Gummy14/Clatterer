@@ -68,7 +68,7 @@ export default {
       this.noProfilePicture = false
       if (this.$refs.form.validate() && this.pass === this.passConfirm && this.imageUrl !== '') {
         this.loading = true
-        var timeStamp = new Date()
+        var timeStamp = firebase.firestore.FieldValue.serverTimestamp()
         var self = this
         firebase.auth().createUserWithEmailAndPassword(email, pass).then(() => {
           firebase.auth().currentUser.updateProfile({displayName: this.user}).then(() => {
