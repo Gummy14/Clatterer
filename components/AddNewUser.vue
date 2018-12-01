@@ -3,7 +3,15 @@
     <v-card-title class="headline">Add a User to this Chat</v-card-title>
     <v-list>
     <v-list-tile class="new-chat">
-      <v-combobox @keypress.native.enter="addUser" v-model="userSelection" :items="userEmails" @change="setSelection($event)"></v-combobox>
+      <v-combobox 
+      @keypress.native.enter="addUser" 
+      v-model="userSelection" 
+      :items="userList"
+      item-text="username"
+      item-value="id"
+      @change="setSelection($event)"
+      >
+      </v-combobox>
       <v-btn @click="addUser" :disabled="loading || this.$store.getters.currentUserToAddToChat === ''"><v-progress-circular indeterminate v-if="loading"></v-progress-circular>Add</v-btn>
     </v-list-tile>
     </v-list>
@@ -18,7 +26,9 @@ export default {
     return {
       allUsers: [],
       loading: false,
-      userSelection: null
+      userSelection: null,
+      selectedUserEmail: '',
+      selectedUserName: ''
     }
   },
   firestore () {
@@ -28,10 +38,10 @@ export default {
   },
   computed: {
     ...mapState({isAddNewUserOpen: 'isAddNewUserOpen'}),
-    userEmails () {
+    userList () {
       var userList = []
       for (var i = 0; i < this.allUsers.length; i++) {
-        userList[i] = this.allUsers[i].id
+        userList[i] = this.allUsers[i]
       }
       return userList
     }
@@ -43,6 +53,8 @@ export default {
   },
   methods: {
     setSelection (selection) {
+      selection !== null ? this.selectedUserEmail = selection.id : this.selectedUserEmail = ''
+      selection !== null ? this.selectedUserName = selection.username : this.selectedUserName = ''
       this.$store.commit('setUserToAddToChat', {
         UserToAddToChat: selection
       })
@@ -51,7 +63,8 @@ export default {
       if (this.$store.getters.currentUserToAddToChat !== '') {
         this.loading = true
         var self = this
-        var userSelection = this.$store.getters.currentUserToAddToChat
+        var userSelectionEmail = this.selectedUserEmail
+        var userSelectionName = this.selectedUserName
         var docChatAvatar
         var docCreatedOn
         var docUsers
@@ -60,15 +73,15 @@ export default {
           docChatAvatar = doc.data().chatAvatar
           docCreatedOn = doc.data().createdOn
           docUsers = doc.data().users
-          docUsers.push(userSelection)
+          docUsers.push(userSelectionName)
           db.collection('chats').doc(self.$store.getters.currentActiveChat).update({
             users: docUsers
           }).then(() => {
-            db.collection('userInfo').doc(userSelection).get()
+            db.collection('userInfo').doc(userSelectionEmail).get()
             .then((doc) => {
               userChats = doc.data().chats
               userChats.push({id: self.$store.getters.currentActiveChat, chatAvatar: docChatAvatar, createdOn: docCreatedOn})
-              db.collection('userInfo').doc(userSelection).update({
+              db.collection('userInfo').doc(userSelectionEmail).update({
                 chats: userChats
               }).then(() => {
                 this.loading = false

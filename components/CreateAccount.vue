@@ -66,7 +66,7 @@ export default {
     createAccountInfo (email, pass, passConfirm) {
       this.arePasswordsDifferent = false
       this.noProfilePicture = false
-      if (this.$refs.form.validate() && this.pass === this.passConfirm && this.imageUrl !== null) {
+      if (this.$refs.form.validate() && this.pass === this.passConfirm && this.imageUrl !== '') {
         this.loading = true
         var timeStamp = new Date()
         var self = this
@@ -77,7 +77,8 @@ export default {
               Email: this.email
             })
             db.collection('userInfo').doc(email).set({
-              chats: []
+              chats: [],
+              username: this.user
             })
             storage.child('profilePics/' + timeStamp.toString()).put(this.image).then(fileData => {
               storage.child('profilePics/' + timeStamp.toString()).getDownloadURL().then(function (url) {

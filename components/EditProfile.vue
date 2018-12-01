@@ -14,7 +14,7 @@
 </template>
 <script>
 import firebase from 'firebase'
-import { storage } from '../main'
+import { db, storage } from '../main'
 import { mapState } from 'vuex'
 export default {
   name: 'edit-profile',
@@ -44,6 +44,9 @@ export default {
                   self.$store.commit('setUserName', {
                     Username: self.userName
                   })
+                  db.collection('userInfo').doc(self.$store.getters.currentEmail).update({
+                    username: self.userName
+                  })
                 })
               })
             }).then(() => {
@@ -54,6 +57,9 @@ export default {
           } else {
             self.$store.commit('setUserName', {
               Username: self.userName
+            })
+            db.collection('userInfo').doc(self.$store.getters.currentEmail).update({
+              username: self.userName
             })
             this.loading = false
             this.$emit('updatedProfile')

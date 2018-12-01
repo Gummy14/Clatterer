@@ -46,7 +46,7 @@ export default {
             avatarUrl = url
             db.collection('chats').doc(chatID).set({
               chatAvatar: url,
-              users: [self.userEmail],
+              users: [self.userName],
               createdOn: timeStamp.toString()
             }).then(() => {
               db.collection('userInfo').doc(self.userEmail).get()
@@ -97,6 +97,9 @@ export default {
     ...mapState({isCreateChatOpen: 'isCreateChatOpen'}, {noCreateChatProfilePicture: 'noCreateChatProfilePicture'}),
     userEmail () {
       return this.$store.getters.currentEmail
+    },
+    userName () {
+      return this.$store.getters.currentUsername
     },
     noChatName () {
       return this.$store.getters.currentNoCreateChatName
