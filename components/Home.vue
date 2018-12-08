@@ -161,7 +161,7 @@ export default {
       clipped: true,
       drawer: false,
       isMobile: false,
-      color: '',
+      color: 'purple darken-3',
       paintDialog: false,
       activeChat: '',
       createNewChat: false,

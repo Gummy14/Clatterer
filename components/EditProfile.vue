@@ -31,7 +31,7 @@ export default {
     saveChanges () {
       if (this.userName !== '' && this.imageUrl !== '') {
         this.loading = true
-        var timeStamp = firebase.firestore.FieldValue.serverTimestamp()
+        var timeStamp = new Date()
         var self = this
         firebase.auth().currentUser.updateProfile({displayName: this.userName}).then(() => {
           if (self.imageChanged) {

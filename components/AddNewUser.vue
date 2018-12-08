@@ -66,12 +66,10 @@ export default {
         var userSelectionEmail = this.selectedUserEmail
         var userSelectionName = this.selectedUserName
         var docChatAvatar
-        var docCreatedOn
         var docUsers
         var userChats
         db.collection('chats').doc(self.$store.getters.currentActiveChat).get().then((doc) => {
           docChatAvatar = doc.data().chatAvatar
-          docCreatedOn = doc.data().createdOn
           docUsers = doc.data().users
           docUsers.push(userSelectionName)
           db.collection('chats').doc(self.$store.getters.currentActiveChat).update({
@@ -80,7 +78,7 @@ export default {
             db.collection('userInfo').doc(userSelectionEmail).get()
             .then((doc) => {
               userChats = doc.data().chats
-              userChats.push({id: self.$store.getters.currentActiveChat, chatAvatar: docChatAvatar, createdOn: docCreatedOn})
+              userChats.push({id: self.$store.getters.currentActiveChat, chatAvatar: docChatAvatar})
               db.collection('userInfo').doc(userSelectionEmail).update({
                 chats: userChats
               }).then(() => {

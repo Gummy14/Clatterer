@@ -20,7 +20,6 @@
 <script>
 import { db, storage } from '../main'
 import { mapState } from 'vuex'
-import firebase from 'firebase'
 export default {
   name: 'chat-creator',
   data () {
@@ -37,7 +36,7 @@ export default {
   methods: {
     createNewRoom () {
       if (this.$refs.form.validate() && this.imageUrl !== '') {
-        var timeStamp = firebase.firestore.FieldValue.serverTimestamp()
+        var timeStamp = new Date()
         var chatID = this.chatName
         var self = this
         var avatarUrl = ''
@@ -47,13 +46,12 @@ export default {
             avatarUrl = url
             db.collection('chats').doc(chatID).set({
               chatAvatar: url,
-              users: [self.userName],
-              createdOn: timeStamp.toString()
+              users: [self.userName]
             }).then(() => {
               db.collection('userInfo').doc(self.userEmail).get()
               .then((doc) => {
                 var userChats = doc.data().chats
-                userChats.push({id: chatID, chatAvatar: avatarUrl, createdOn: timeStamp.toString()})
+                userChats.push({id: chatID, chatAvatar: avatarUrl})
                 db.collection('userInfo').doc(self.userEmail).update({
                   chats: userChats
                 })
@@ -109,6 +107,7 @@ export default {
   watch: {
     isCreateChatOpen (val) {
       this.$refs.form.reset()
+      this.imageUrl = ''
     }
   }
 }
@@ -129,7 +128,6 @@ export default {
   margin-top: 3%;
 }
 .create-new-chat {
-  float: right;
   margin: 2.5%;
   margin-top: 3%;
 }

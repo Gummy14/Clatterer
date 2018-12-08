@@ -45,12 +45,13 @@ export default {
         var user = this.user
         var userProfilePicture = this.userProfilePicture
         var userEmail = this.userEmail
+        var clientSideTimeStamp = new Date()
         var timeStamp = firebase.firestore.FieldValue.serverTimestamp()
         var imageMessage = this.imageUrl
         var activeChat = this.$store.getters.currentActiveChat
         if (this.image != null) {
-          storage.child('uploadedImages/' + timeStamp.toString()).put(this.image).then(fileData => {
-            storage.child('uploadedImages/' + timeStamp.toString()).getDownloadURL().then(function (url) {
+          storage.child('uploadedImages/' + clientSideTimeStamp.toString()).put(this.image).then(fileData => {
+            storage.child('uploadedImages/' + clientSideTimeStamp.toString()).getDownloadURL().then(function (url) {
               imageMessage = url
               db.collection('chats').doc(activeChat).collection('messageData').add({ user, userProfilePicture, userEmail, messageText, imageMessage, timeStamp, reacts })
             })

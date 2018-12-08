@@ -83,7 +83,6 @@ export default {
   padding: 2%;
 }
 .createAccount {
-  float: right;
 }
 .title {
   padding-bottom: 2%;
